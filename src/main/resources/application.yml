@@ -1,0 +1,14 @@
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    username: postgres
+    password: 2996362441
+    url: jdbc:postgresql://localhost:5432/spring_cs307
+
+server:
+  port: 8181
+
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  mapper-locations: classpath:edu/example/springdemo/mapper/xml/*.xml
