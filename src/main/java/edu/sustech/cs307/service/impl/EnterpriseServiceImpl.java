@@ -60,4 +60,10 @@ public class EnterpriseServiceImpl extends ServiceImpl<EnterpriseMapper, Enterpr
         }
         return this.saveBatch(enterpriseList);
     }
+
+    @Override
+    public Center getCenter(Enterprise enterprise) {
+        QueryWrapper<Center> wrapper = new QueryWrapper<Center>().eq("id", enterprise.getSupplyCenterId());
+        return centerMapper.selectOne(wrapper);
+    }
 }

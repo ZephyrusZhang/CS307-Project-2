@@ -5,7 +5,7 @@
     <insert id="addInventory" parameterType="edu.sustech.cs307.entity.Inventory">
         insert into inventory (supply_center_id, product_model_id, count)
         values (#{supplyCenterId}, #{productModelId}, #{count})
-        on conflict do nothing
+        on conflict (supply_center_id, product_model_id) do update set count = excluded.count + inventory.count;
     </insert>
 
 </mapper>

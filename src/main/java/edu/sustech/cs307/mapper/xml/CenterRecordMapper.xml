@@ -5,7 +5,6 @@
     <insert id="addCenterRecord" parameterType="edu.sustech.cs307.entity.CenterRecord">
         insert into center_record (supply_center_id, product_model_id, staff_id, date, purchase_price, quantity)
         values (#{supplyCenterId}, #{productModelId}, #{staffId}, #{date}, #{purchasePrice}, #{quantity})
-        on conflict do nothing
     </insert>
 
 </mapper>

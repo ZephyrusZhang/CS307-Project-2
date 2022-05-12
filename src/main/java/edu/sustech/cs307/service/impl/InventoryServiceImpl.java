@@ -1,13 +1,11 @@
 package edu.sustech.cs307.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
 import edu.sustech.cs307.entity.*;
 import edu.sustech.cs307.mapper.*;
 import edu.sustech.cs307.service.IInventoryService;
-import edu.sustech.cs307.service.IStaffService;
 import edu.sustech.cs307.util.Util;
 import org.springframework.stereotype.Service;
 
@@ -34,18 +32,15 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
     private final ModelMapper modelMapper;
     private final CenterRecordMapper centerRecordMapper;
     private final InventoryMapper inventoryMapper;
-    private final IStaffService iStaffService;
 
     public InventoryServiceImpl(StaffMapper staffMapper,
                                 CenterMapper centerMapper,
                                 ModelMapper modelMapper,
-                                IStaffService iStaffService,
                                 CenterRecordMapper centerRecordMapper,
                                 InventoryMapper inventoryMapper) {
         this.staffMapper = staffMapper;
         this.centerMapper = centerMapper;
         this.modelMapper = modelMapper;
-        this.iStaffService = iStaffService;
         this.centerRecordMapper = centerRecordMapper;
         this.inventoryMapper = inventoryMapper;
     }
@@ -61,20 +56,16 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
             List<String> allModelName = modelMapper.selectList(null).stream().map(Model::getModelName).toList();
             List<String> allStaffNumber = staffMapper.selectList(null).stream().map(Staff::getNumber).toList();
             while ((line = reader.readNext()) != null) {
-                QueryWrapper<Staff> wrapperStaff = new QueryWrapper<Staff>().eq("number", line[3]);
-                Staff staff = staffMapper.selectOne(wrapperStaff);
-                if (staff == null) continue;
-                if (!iStaffService.getSupplyCenter(staff).getName().equals(line[1])) continue;
-                if (!staff.getType().equals("Supply Staff")) continue;
+                Staff staff = staffMapper.selectByNumber(line[3]);
+                if (!line[1].equals(staffMapper.getCenterName(line[3]))) continue;
+                if (staff == null || !staff.getType().equals("Supply Staff")) continue;
                 if (!allCenterName.contains(line[1])) continue;
                 if (!allModelName.contains(line[2])) continue;
                 if (!allStaffNumber.contains(line[3])) continue;
 
-                QueryWrapper<Model> wrapperModel = new QueryWrapper<Model>().eq("model_name", line[2]);
-                QueryWrapper<Center> wrapperCenter = new QueryWrapper<Center>().eq("name", line[1]);
-                int product_model_id = modelMapper.selectOne(wrapperModel).getId();
-                int supply_center_id = centerMapper.selectOne(wrapperCenter).getId();
-                int staff_id = staffMapper.selectOne(wrapperStaff).getId();
+                int product_model_id = modelMapper.selectByName(line[2]).getId();
+                int supply_center_id = centerMapper.selectByName(line[1]).getId();
+                int staff_id = staff.getId();
 
                 CenterRecord centerRecord = new CenterRecord();
                 centerRecord.setSupplyCenterId(supply_center_id);

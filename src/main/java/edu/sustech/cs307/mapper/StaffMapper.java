@@ -3,6 +3,8 @@ package edu.sustech.cs307.mapper;
 import edu.sustech.cs307.entity.Staff;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
 /**
  * <p>
@@ -14,5 +16,13 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface StaffMapper extends BaseMapper<Staff> {
+
+    @Select("select * from staff where number = #{number}")
+    Staff selectByNumber(@Param("number") String number);
+
+    @Select("select c.name as center_name from staff " +
+            "join center c on c.id = staff.supply_center_id " +
+            "where number = #{number}")
+    String getCenterName(@Param("number") String number);
 
 }

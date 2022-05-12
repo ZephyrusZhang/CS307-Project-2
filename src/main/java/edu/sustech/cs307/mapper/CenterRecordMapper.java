@@ -15,6 +15,6 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface CenterRecordMapper extends BaseMapper<CenterRecord> {
 
-    int addCenterRecord(CenterRecord centerRecord);
+    void addCenterRecord(CenterRecord centerRecord);
 
 }
