@@ -16,15 +16,4 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/model")
 public class ModelController {
-
-    private final IModelService modelService;
-
-    public ModelController(IModelService modelService) {
-        this.modelService = modelService;
-    }
-
-    @GetMapping("/init")
-    public boolean init() {
-        return modelService.init();
-    }
 }

@@ -1,5 +1,6 @@
 package edu.sustech.cs307.service;
 
+import edu.sustech.cs307.entity.Center;
 import edu.sustech.cs307.entity.Staff;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -14,5 +15,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface IStaffService extends IService<Staff> {
 
     boolean init();
+
+    Center getSupplyCenter(Staff staff);
 
 }

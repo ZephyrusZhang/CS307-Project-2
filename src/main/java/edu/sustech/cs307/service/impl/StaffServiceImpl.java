@@ -62,4 +62,10 @@ public class StaffServiceImpl extends ServiceImpl<StaffMapper, Staff> implements
         }
         return this.saveBatch(staffList);
     }
+
+    @Override
+    public Center getSupplyCenter(Staff staff) {
+        QueryWrapper<Center> wrapper = new QueryWrapper<Center>().eq("id", staff.getSupplyCenterId());
+        return centerMapper.selectOne(wrapper);
+    }
 }

@@ -30,9 +30,4 @@ public class CenterController {
     public List<Center> centerList() {
         return this.centerService.list();
     }
-
-    @GetMapping("/init")
-    public boolean init() {
-        return centerService.init();
-    }
 }

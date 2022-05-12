@@ -13,4 +13,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IInventoryService extends IService<Inventory> {
 
+    boolean stockIn(String filePath);
+
 }

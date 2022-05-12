@@ -23,8 +23,4 @@ public class StaffController {
         this.staffService = staffService;
     }
 
-    @GetMapping("/init")
-    public boolean init() {
-        return staffService.init();
-    }
 }

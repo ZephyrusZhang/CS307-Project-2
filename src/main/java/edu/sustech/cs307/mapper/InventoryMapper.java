@@ -15,4 +15,6 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface InventoryMapper extends BaseMapper<Inventory> {
 
+    int addInventory(Inventory inventory);
+
 }

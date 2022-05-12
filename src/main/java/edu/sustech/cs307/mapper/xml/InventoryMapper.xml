@@ -2,4 +2,10 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="edu.sustech.cs307.mapper.InventoryMapper">
 
+    <insert id="addInventory" parameterType="edu.sustech.cs307.entity.Inventory">
+        insert into inventory (supply_center_id, product_model_id, count)
+        values (#{supplyCenterId}, #{productModelId}, #{count})
+        on conflict do nothing
+    </insert>
+
 </mapper>

@@ -26,11 +26,6 @@ public class EnterpriseController {
         this.enterpriseService = enterpriseService;
     }
 
-    @GetMapping("/init")
-    public boolean init() {
-        return enterpriseService.init();
-    }
-
     @GetMapping("/listEnterprise")
     public List<Enterprise> listEnterprise() {
         return this.enterpriseService.list();

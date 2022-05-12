@@ -1,4 +1,11 @@
 spring:
+  servlet:
+    multipart:
+      enabled: true
+      file-size-threshold: 64MB
+      max-file-size: 256MB
+      max-request-size: 256MB
+
   datasource:
     driver-class-name: org.postgresql.Driver
     username: postgres
@@ -11,4 +18,5 @@ server:
 mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-  mapper-locations: classpath:edu/example/springdemo/mapper/xml/*.xml
+  mapper-locations: classpath:edu/sustech/cs307/mapper/xml/*.xml
+  type-aliases-package: edu.sustech.cs307.entity
