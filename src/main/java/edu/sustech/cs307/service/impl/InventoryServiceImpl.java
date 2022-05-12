@@ -34,11 +34,18 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
     private final ModelMapper modelMapper;
     private final CenterRecordMapper centerRecordMapper;
     private final InventoryMapper inventoryMapper;
+    private final IStaffService iStaffService;
 
-    public InventoryServiceImpl(StaffMapper staffMapper, CenterMapper centerMapper, ModelMapper modelMapper, IStaffService iStaffService, CenterRecordMapper centerRecordMapper, InventoryMapper inventoryMapper) {
+    public InventoryServiceImpl(StaffMapper staffMapper,
+                                CenterMapper centerMapper,
+                                ModelMapper modelMapper,
+                                IStaffService iStaffService,
+                                CenterRecordMapper centerRecordMapper,
+                                InventoryMapper inventoryMapper) {
         this.staffMapper = staffMapper;
         this.centerMapper = centerMapper;
         this.modelMapper = modelMapper;
+        this.iStaffService = iStaffService;
         this.centerRecordMapper = centerRecordMapper;
         this.inventoryMapper = inventoryMapper;
     }
@@ -57,6 +64,7 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
                 QueryWrapper<Staff> wrapperStaff = new QueryWrapper<Staff>().eq("number", line[3]);
                 Staff staff = staffMapper.selectOne(wrapperStaff);
                 if (staff == null) continue;
+                if (!iStaffService.getSupplyCenter(staff).getName().equals(line[1])) continue;
                 if (!staff.getType().equals("Supply Staff")) continue;
                 if (!allCenterName.contains(line[1])) continue;
                 if (!allModelName.contains(line[2])) continue;
@@ -83,7 +91,7 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
                 inventory.setCount(Integer.parseInt(line[6]));
                 inventoryMapper.addInventory(inventory);
 
-                centerMapper.updateExpenditure(Integer.parseInt(line[6]), supply_center_id);
+                centerMapper.updateExpenditure(Integer.parseInt(line[6]) * Integer.parseInt(line[5]), supply_center_id);
             }
         } catch (IOException | CsvValidationException e) {
             e.printStackTrace();

@@ -16,11 +16,4 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/staff")
 public class StaffController {
-
-    private final IStaffService staffService;
-
-    public StaffController(IStaffService staffService) {
-        this.staffService = staffService;
-    }
-
 }

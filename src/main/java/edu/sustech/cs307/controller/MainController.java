@@ -17,7 +17,10 @@ public class MainController {
     private final IModelService iModelService;
     private final IStaffService iStaffService;
 
-    public MainController(ICenterService iCenterService, IEnterpriseService iEnterpriseService, IModelService iModelService, IStaffService iStaffService) {
+    public MainController(ICenterService iCenterService,
+                          IEnterpriseService iEnterpriseService,
+                          IModelService iModelService,
+                          IStaffService iStaffService) {
         this.iCenterService = iCenterService;
         this.iEnterpriseService = iEnterpriseService;
         this.iModelService = iModelService;

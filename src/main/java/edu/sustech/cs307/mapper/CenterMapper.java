@@ -16,6 +16,6 @@ import org.apache.ibatis.annotations.Param;
 @Mapper
 public interface CenterMapper extends BaseMapper<Center> {
 
-    int updateExpenditure(@Param("expenditure") int expenditure, @Param("id") int id);
+    void updateExpenditure(@Param("expenditure") int expenditure, @Param("id") int id);
 
 }
