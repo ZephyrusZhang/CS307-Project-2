@@ -19,7 +19,7 @@ import java.time.LocalDate;
 @Mapper
 public interface OrdersMapper extends BaseMapper<Orders> {
 
-    @Insert("insert into orders (contract_number, enterprise_id, product_model_id, quantity, estimated_delivery_date, lodgement_date, salesman_id)" +
+    @Insert("insert into orders (contract_number, enterprise_id, product_model_id, quantity, estimated_delivery_date, lodgement_date, salesman_id) " +
             "values (#{contractNumber}, #{enterpriseId}, #{productModelId}, #{quantity}, #{estimatedDeliveryDate}, #{lodgementDate}, #{salesmanId});")
     void insert(@Param("contractNumber") String contractNumber,
                 @Param("enterpriseId") int enterpriseId,

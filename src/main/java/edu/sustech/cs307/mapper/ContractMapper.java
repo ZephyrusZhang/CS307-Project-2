@@ -2,11 +2,10 @@ package edu.sustech.cs307.mapper;
 
 import edu.sustech.cs307.entity.Contract;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.*;
 
 import java.time.LocalDate;
+import java.util.Map;
 
 /**
  * <p>
@@ -23,5 +22,7 @@ public interface ContractMapper extends BaseMapper<Contract> {
             "values (#{contractNumber}, #{contractDate}, #{contractManagerId}, #{contractType}) on conflict do nothing;")
     void insert(@Param("contractNumber") String contractNumber, @Param("contractDate") LocalDate date,
                 @Param("contractManagerId") int contractManagerId, @Param("contractType") String contractType);
+
+    Map<String, Object> getContractCount();
 
 }

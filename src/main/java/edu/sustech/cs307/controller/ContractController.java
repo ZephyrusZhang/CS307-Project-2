@@ -1,8 +1,11 @@
 package edu.sustech.cs307.controller;
 
+import edu.sustech.cs307.mapper.ContractMapper;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Map;
 
 /**
  * <p>
@@ -15,5 +18,18 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/contract")
 public class ContractController {
+
+    private final ContractMapper contractMapper;
+
+    public ContractController(ContractMapper contractMapper) {
+        this.contractMapper = contractMapper;
+    }
+
+    @GetMapping("/getContractCount")
+    public Map<String, Object> getContractCount() {
+        Map<String, Object> map = contractMapper.getContractCount();
+        System.out.printf("count=%d\n", (int) map.get("count"));
+        return map;
+    }
 
 }
