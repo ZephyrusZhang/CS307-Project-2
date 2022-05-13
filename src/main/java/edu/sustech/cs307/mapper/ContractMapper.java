@@ -25,6 +25,4 @@ public interface ContractMapper extends BaseMapper<Contract> {
 
     Map<String, Integer> getContractCount();
 
-
-
 }
