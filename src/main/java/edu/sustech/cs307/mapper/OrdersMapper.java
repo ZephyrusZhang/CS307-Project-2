@@ -2,9 +2,7 @@ package edu.sustech.cs307.mapper;
 
 import edu.sustech.cs307.entity.Orders;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.*;
 
 import java.time.LocalDate;
 import java.util.Map;
@@ -32,4 +30,47 @@ public interface OrdersMapper extends BaseMapper<Orders> {
 
     Map<String, Integer> getOrderCount();
 
+    @Select("select count(*) from orders " +
+            "where contract_number = #{contract_number} " +
+            "and product_model_id = #{product_model_id} " +
+            "and salesman_id = #{salesman_id};")
+    int select(
+            @Param("contract_number") String contract_number,
+            @Param("product_model_id") int product_model_id,
+            @Param("salesman_id") int salesman_id);
+
+    @Delete("delete from orders " +
+            "where contract_number = #{contract_number} " +
+            "and product_model_id = #{product_model_id} " +
+            "and salesman_id = #{salesman_id};")
+    void delete(
+            @Param("contract_number") String contract_number,
+            @Param("product_model_id") int product_model_id,
+            @Param("salesman_id") int salesman_id);
+
+    @Update("update orders " +
+            "set quantity= #{quantity} ,estimated_delivery_date= #{estimated_delivery_date}, lodgement_date = #{lodgement_date} " +
+            "where contract_number = #{contract_number} and product_model_id = #{product_model_id} and salesman_id = #{salesman_id}; ")
+    void update(
+            @Param("quantity") int quantity,
+            @Param("estimated_delivery_date") LocalDate estimated_delivery_date,
+            @Param("lodgement_date") LocalDate lodgement_date,
+            @Param("contract_number") String contract_number,
+            @Param("product_model_id") int product_model_id,
+            @Param("salesman_id") int salesman_id);
+
+    @Select("select quantity from orders " +
+            "where contract_number = #{contract_number} " +
+            "and product_model_id = #{product_model_id} " +
+            "and salesman_id = #{salesman_id};")
+    int selectQuantity(
+            @Param("contract_number") String contract_number,
+            @Param("product_model_id") int product_model_id,
+            @Param("salesman_id") int salesman_id);
+
+    Map<String, Object> getDeleteOrder(
+            @Param("contract_number") String contract_number,
+            @Param("salesman_id") int salesman_id,
+            @Param("seq") int seq
+    );
 }

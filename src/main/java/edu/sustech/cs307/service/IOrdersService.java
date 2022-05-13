@@ -14,5 +14,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface IOrdersService extends IService<Orders> {
 
     boolean placeOrder(String path);
+    boolean updateOrder(String path);
+    boolean deleteOrder(String path);
 
 }

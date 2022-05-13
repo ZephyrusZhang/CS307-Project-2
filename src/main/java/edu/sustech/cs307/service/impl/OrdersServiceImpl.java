@@ -14,6 +14,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
+import java.util.Map;
 
 /**
  * <p>
@@ -89,4 +91,83 @@ public class OrdersServiceImpl extends ServiceImpl<OrdersMapper, Orders> impleme
         }
         return true;
     }
+    public boolean updateOrder(String path) {
+        try (FileInputStream fis = new FileInputStream(path);
+             InputStreamReader isr = new InputStreamReader(fis, StandardCharsets.UTF_8);
+             CSVReader reader = new CSVReader(isr)) {
+            String[] line;
+            reader.readNext();
+            while ((line = reader.readNext()) != null) {
+                String[] line1 = line[0].split("\t");
+
+                Model model = modelMapper.selectByName(line1[1]);
+                Staff staff = staffMapper.selectByNumber(line1[2]);
+                int quantity = Integer.parseInt(line1[3]);
+                LocalDate estimate_delivery_date = LocalDate.parse(line1[4]);
+                LocalDate lodgement_date = LocalDate.parse(line1[5]);
+
+                int number=ordersMapper.select(line1[0],model.getId(),staff.getId());
+
+                if(number!=0){
+                    int quantity_pre = ordersMapper.selectQuantity(line1[0],model.getId(),staff.getId());
+                    int change = quantity-quantity_pre;
+
+                    modelMapper.updateSalesNum(change,model.getId());
+                    inventoryMapper.updateInventoryNum(change,staff.getSupplyCenterId(),model.getId());
+
+                    if(quantity==0){
+                        ordersMapper.delete(line1[0],model.getId(),staff.getId());
+                    }
+                    else{
+                        ordersMapper.update(quantity,estimate_delivery_date,lodgement_date,line1[0],model.getId(),staff.getId());
+
+                    }
+                }
+
+            }
+        } catch (IOException | CsvValidationException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+    public boolean deleteOrder(String path){
+        try (FileInputStream fis = new FileInputStream(path);
+             InputStreamReader isr = new InputStreamReader(fis, StandardCharsets.UTF_8);
+             CSVReader reader = new CSVReader(isr)) {
+            String[] line;
+            reader.readNext();
+            while ((line = reader.readNext()) != null) {
+                String[] line1 = line[0].split("\t");
+                Staff staff = staffMapper.selectByNumber(line1[1]);
+                int seq = Integer.parseInt(line1[2]);
+
+                Map<String, Object> map = ordersMapper.getDeleteOrder(line1[0], staff.getId(), seq);
+                if (map != null) {
+
+                    String contract_number = (String) map.get("contract_number");
+                    int product_model_id = (int) map.get("product_model_id");
+                    int salesman_id = (int) map.get("salesman_id");
+
+
+                    int quantity_pre = ordersMapper.selectQuantity(contract_number, product_model_id, salesman_id);
+                    int change = -quantity_pre;
+                    modelMapper.updateSalesNum(change, product_model_id);
+                    inventoryMapper.updateInventoryNum(change, staff.getSupplyCenterId(), product_model_id);
+                    ordersMapper.delete(line1[0], product_model_id, staff.getId());
+
+
+                }
+            }
+
+
+        } catch (IOException | CsvValidationException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
 }
+
+
