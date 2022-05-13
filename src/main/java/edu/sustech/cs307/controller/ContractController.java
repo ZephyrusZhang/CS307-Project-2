@@ -26,9 +26,9 @@ public class ContractController {
     }
 
     @GetMapping("/getContractCount")
-    public Map<String, Object> getContractCount() {
-        Map<String, Object> map = contractMapper.getContractCount();
-        System.out.printf("count=%d\n", (int) map.get("count"));
+    public Map<String, Integer> getContractCount() {
+        Map<String, Integer> map = contractMapper.getContractCount();
+        System.out.printf("count=%d\n", map.get("count"));
         return map;
     }
 

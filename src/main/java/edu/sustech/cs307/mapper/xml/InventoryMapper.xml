@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="edu.sustech.cs307.mapper.InventoryMapper">
+    <resultMap id="avgStockInByCenterMap" type="java.util.Map">
+        <result property="centerName" column="centerName" javaType="java.lang.String"/>
+        <result property="avg" column="avg" javaType="java.lang.Double"/>
+    </resultMap>
 
+    <select id="getAvgStockByCenter" resultMap="avgStockInByCenterMap">
+        select c.name as centerName, round(sum(count) / count(product_model_id)::numeric, 1) as avg
+        from inventory
+                 join center c on c.id = inventory.supply_center_id
+        group by c.name
+        order by c.name
+    </select>
 </mapper>

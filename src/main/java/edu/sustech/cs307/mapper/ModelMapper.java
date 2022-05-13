@@ -7,6 +7,9 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * <p>
  *  Mapper 接口
@@ -23,5 +26,11 @@ public interface ModelMapper extends BaseMapper<Model> {
 
     @Update("update model set sales = sales + #{soldNum} where id = #{productModelId}")
     void updateSalesNum(@Param("soldNum") int soldNum, @Param("productModelId") int productModelId);
+
+    Map<String, Integer> getNeverSoldProductCount();
+
+    List<Map<String, Object>> getFavoriteProductModel();
+
+    List<Map<String, Object>> getProductByNumber(@Param("productName") String productName);
 
 }

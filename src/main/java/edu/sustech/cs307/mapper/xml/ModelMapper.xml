@@ -1,5 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="edu.sustech.cs307.mapper.ModelMapper">
+    <resultMap id="neverSoldProductCountMap" type="java.util.Map">
+        <result property="count" column="count" javaType="java.lang.Integer"/>
+    </resultMap>
+    <resultMap id="favoriteProductModelMap" type="java.util.Map">
+        <result property="modelName" column="model_name" javaType="java.lang.String"/>
+        <result property="sales" column="sales" javaType="java.lang.Integer"/>
+    </resultMap>
+    <resultMap id="productByNumberMap" type="java.util.Map">
+        <result property="centerName" column="centerName" javaType="java.lang.String"/>
+        <result property="modelName" column="modelName" javaType="java.lang.String"/>
+        <result property="count" column="count" javaType="java.lang.Integer"/>
+    </resultMap>
 
+
+    <select id="getNeverSoldProductCount" resultMap="neverSoldProductCountMap">
+        select count(*) as count
+        from (select model.model_name
+              from model
+                       join center_record cr on model.id = cr.product_model_id
+              where model.sales = 0
+                and cr.quantity != 0
+              group by model.model_name) as sub;
+    </select>
+    <select id="getFavoriteProductModel" resultMap="favoriteProductModelMap">
+        select model_name, sales
+        from model
+        where sales = (select max(sales) from model)
+    </select>
+    <select id="getProductByNumber" resultMap="productByNumberMap">
+        select center.name as centerName, m.model_name as modelName, i.count as count
+        from center
+                 join inventory i on center.id = i.supply_center_id
+                 join model m on m.id = i.product_model_id
+        where product_name = #{productName}
+        group by center.name, m.product_name, m.model_name, i.count
+    </select>
 </mapper>

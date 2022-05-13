@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.time.LocalDate;
+import java.util.Map;
 
 /**
  * <p>
@@ -28,5 +29,7 @@ public interface OrdersMapper extends BaseMapper<Orders> {
                 @Param("estimatedDeliveryDate") LocalDate estimatedDeliveryDate,
                 @Param("lodgementDate") LocalDate lodgementDate,
                 @Param("salesmanId") int salesmanId);
+
+    Map<String, Integer> getOrderCount();
 
 }

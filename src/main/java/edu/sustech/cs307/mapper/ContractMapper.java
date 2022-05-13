@@ -23,6 +23,8 @@ public interface ContractMapper extends BaseMapper<Contract> {
     void insert(@Param("contractNumber") String contractNumber, @Param("contractDate") LocalDate date,
                 @Param("contractManagerId") int contractManagerId, @Param("contractType") String contractType);
 
-    Map<String, Object> getContractCount();
+    Map<String, Integer> getContractCount();
+
+
 
 }
