@@ -2,9 +2,10 @@ package edu.sustech.cs307.mapper;
 
 import edu.sustech.cs307.entity.Staff;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -24,5 +25,7 @@ public interface StaffMapper extends BaseMapper<Staff> {
             "join center c on c.id = staff.supply_center_id " +
             "where number = #{number}")
     String getCenterName(@Param("number") String number);
+
+    List<Map<String, Object>> getAllStaffCount();
 
 }
