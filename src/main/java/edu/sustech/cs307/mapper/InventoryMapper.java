@@ -2,10 +2,7 @@ package edu.sustech.cs307.mapper;
 
 import edu.sustech.cs307.entity.Inventory;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 
 /**
  * <p>
@@ -18,6 +15,9 @@ import org.apache.ibatis.annotations.Update;
 @Mapper
 public interface InventoryMapper extends BaseMapper<Inventory> {
 
+    @Insert("insert into inventory (supply_center_id, product_model_id, count) " +
+            "values (#{supplyCenterId}, #{productModelId}, #{count}) " +
+            "on conflict (supply_center_id, product_model_id) do update set count = excluded.count + inventory.count;")
     void addInventory(Inventory inventory);
 
     @Select("select * from inventory where supply_center_id = #{supplyCenterId} and product_model_id = #{productModelId}")
