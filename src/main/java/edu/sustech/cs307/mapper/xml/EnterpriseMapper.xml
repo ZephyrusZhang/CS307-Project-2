@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="edu.sustech.cs307.mapper.EnterpriseMapper">
+    <resultMap id="enterpriseSelectListMap" type="java.util.Map">
+        <result property="enterpriseName" column="enterpriseName" javaType="java.lang.String"/>
+        <result property="country" column="country" javaType="java.lang.String"/>
+        <result property="city" column="city" javaType="java.lang.String"/>
+        <result property="centerName" column="centerName" javaType="java.lang.String"/>
+    </resultMap>
 
+    <select id="selectPage" resultMap="enterpriseSelectListMap">
+        select enterprise.name as enterpriseName, country, city, c.name as centerName, industry
+        from enterprise
+                 join center c on c.id = enterprise.supply_center_id
+    </select>
 </mapper>

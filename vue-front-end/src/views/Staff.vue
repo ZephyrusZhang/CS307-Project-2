@@ -1,5 +1,5 @@
 <template>
-  <div class="home" style="padding: 20px 180px">
+  <div class="staff" style="padding: 20px 180px">
     <div style="margin: 10px 0">
       <el-button type="primary" @click="insert">新增</el-button>
     </div>
@@ -81,7 +81,7 @@ import request from "@/util/request";
 import {Female, Male} from "@element-plus/icons";
 
 export default {
-  name: 'HomeView',
+  name: 'Staff',
   components: {Female, Male},
   data() {
     return {

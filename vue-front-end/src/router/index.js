@@ -6,12 +6,17 @@ const routes = [
     path: '/',
     name: 'Layout',
     component: Layout,
-    redirect: '/home',
+    redirect: '/staff',
     children: [
       {
-        path: 'home',
-        name: 'Home',
-        component: () => import("@/views/HomeView")
+        path: 'staff',
+        name: 'Staff',
+        component: () => import("@/views/Staff")
+      },
+      {
+        path: 'enterprise',
+        name: 'Enterprise',
+        component: () => import('@/views/Enterprise')
       }
     ]
   },
