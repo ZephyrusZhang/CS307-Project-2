@@ -18,6 +18,8 @@
 </template>
 
 <script>
+import request from "@/util/request";
+
 export default {
   name: "Login",
   data() {
@@ -27,7 +29,22 @@ export default {
   },
   methods: {
     login() {
-
+      console.log('login')
+      request.post("/users/login", this.form).then(response => {
+        console.log(response)
+        if (response.code === '114' || response.code === '514') {
+          this.$message({
+            type: 'error',
+            message: response.msg
+          })
+        } else {
+          this.$message({
+            type: 'success',
+            message: '登录成功'
+          })
+          this.$router.push('/')
+        }
+      })
     }
   }
 }

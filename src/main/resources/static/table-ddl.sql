@@ -114,7 +114,7 @@ create table center_record
     constraint center_record_staff_fk foreign key (staff_id) references staff (id) on delete cascade
 );
 
-create table "user"
+create table users
 (
     username varchar(30) primary key,
     password varchar(18) not null
