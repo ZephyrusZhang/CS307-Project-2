@@ -14,6 +14,8 @@ drop table if exists staff cascade;
 
 drop table if exists center cascade;
 
+drop table if exists "user" cascade;
+
 
 create table model
 (
@@ -23,8 +25,8 @@ create table model
     product_name varchar(128) not null,
     unit_price   int          not null,
     sales        int          not null,
-    constraint model_uk unique (number, model_name),
-    constraint unit_price_valid check ( unit_price > 0 )
+    constraint model_uk unique (number, model_name)
+--     constraint unit_price_valid check ( unit_price > 0 )
 );
 
 create table center
@@ -46,7 +48,7 @@ create table staff
     mobile_number    varchar(11) not null,
     type             varchar(32) not null,
     supply_center_id int         not null,
-    constraint center_staff_fk foreign key (supply_center_id) references center (id),
+    constraint center_staff_fk foreign key (supply_center_id) references center (id) on delete cascade,
     constraint staff_uk unique (number),
     constraint age_valid check ( age >= 0 )
 );
@@ -60,7 +62,7 @@ create table enterprise
     supply_center_id int          not null,
     industry         varchar(128) not null,
     constraint enterprise_uk unique (name),
-    constraint enterprise_supply_center_fk foreign key (supply_center_id) references center (id)
+    constraint enterprise_supply_center_fk foreign key (supply_center_id) references center (id) on delete cascade
 );
 
 create table contract
@@ -70,7 +72,7 @@ create table contract
     contract_manager_id int          not null,
     contract_type       varchar(256) not null,
     constraint contract_uk unique (contract_number),
-    constraint contract_staff_fk foreign key (contract_manager_id) references staff (id)
+    constraint contract_staff_fk foreign key (contract_manager_id) references staff (id) on delete cascade
 );
 
 create table orders
@@ -83,10 +85,10 @@ create table orders
     lodgement_date          date        not null,
     salesman_id             int         not null,
 --     constraint orders_uk unique (contract_number, product_model_id, salesman_id),
-    constraint orders_product_model_fk foreign key (product_model_id) references model (id),
-    constraint orders_salesman_fk foreign key (salesman_id) references staff (id),
-    constraint orders_enterprise_fk foreign key (enterprise_id) references enterprise (id),
-    constraint orders_contract_fk foreign key (contract_number) references contract (contract_number)
+    constraint orders_product_model_fk foreign key (product_model_id) references model (id) on delete cascade,
+    constraint orders_salesman_fk foreign key (salesman_id) references staff (id) on delete cascade,
+    constraint orders_enterprise_fk foreign key (enterprise_id) references enterprise (id) on delete cascade,
+    constraint orders_contract_fk foreign key (contract_number) references contract (contract_number) on delete cascade
 );
 
 create table inventory
@@ -95,8 +97,8 @@ create table inventory
     product_model_id int not null,
     count            int not null,
     constraint inventory_uk unique (supply_center_id, product_model_id),
-    constraint stock_center_fk foreign key (supply_center_id) references center (id),
-    constraint stock_model_fk foreign key (product_model_id) references model (id)
+    constraint stock_center_fk foreign key (supply_center_id) references center (id) on delete cascade,
+    constraint stock_model_fk foreign key (product_model_id) references model (id) on delete cascade
 );
 
 create table center_record
@@ -107,7 +109,13 @@ create table center_record
     date             DATE not null,
     purchase_price   int  not null,
     quantity         int  not null,
-    constraint center_record_supply_center_fk foreign key (supply_center_id) references center (id),
-    constraint center_record_product_model_fk foreign key (product_model_id) references model (id),
-    constraint center_record_staff_fk foreign key (staff_id) references staff (id)
+    constraint center_record_supply_center_fk foreign key (supply_center_id) references center (id) on delete cascade,
+    constraint center_record_product_model_fk foreign key (product_model_id) references model (id) on delete cascade,
+    constraint center_record_staff_fk foreign key (staff_id) references staff (id) on delete cascade
+);
+
+create table "user"
+(
+    username varchar(30) primary key,
+    password varchar(18) not null
 );

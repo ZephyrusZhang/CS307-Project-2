@@ -26,6 +26,9 @@ public interface StaffMapper extends BaseMapper<Staff> {
             "where number = #{number}")
     String getCenterName(@Param("number") String number);
 
+    @Delete("delete from staff where number = #{number}")
+    boolean deleteByNumber(@Param("number") String number);
+
     List<Map<String, Object>> getAllStaffCount();
 
 }

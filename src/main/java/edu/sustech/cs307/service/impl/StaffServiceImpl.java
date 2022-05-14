@@ -47,7 +47,7 @@ public class StaffServiceImpl extends ServiceImpl<StaffMapper, Staff> implements
                 Staff staff = new Staff();
                 QueryWrapper<Center> wrapperCenter = new QueryWrapper<>();
                 wrapperCenter.eq("name", line[5]);
-                staff.setId(Integer.parseInt(line[0]));
+//                staff.setId(Integer.parseInt(line[0]));
                 staff.setName(line[1]);
                 staff.setAge(Integer.parseInt(line[2]));
                 staff.setGender(line[3]);
