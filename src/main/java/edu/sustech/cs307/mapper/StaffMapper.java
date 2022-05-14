@@ -1,5 +1,6 @@
 package edu.sustech.cs307.mapper;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import edu.sustech.cs307.entity.Staff;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.*;
@@ -30,5 +31,19 @@ public interface StaffMapper extends BaseMapper<Staff> {
     boolean deleteByNumber(@Param("number") String number);
 
     List<Map<String, Object>> getAllStaffCount();
+
+    Page<Map<String, Object>> listPage(Page<?> page);
+
+    Page<Map<String, Object>> selectByNumberPage(Page<?> page, @Param("number") String name);
+
+    @Update("update staff " +
+            "set name = #{name}, " +
+            "age = #{age}, " +
+            "gender = #{gender}, " +
+            "mobile_number = #{mobileNumber}, " +
+            "type = #{type}, " +
+            "supply_center_id = #{supplyCenterId} " +
+            "where number = #{number}")
+    int updateByName(Staff staff);
 
 }

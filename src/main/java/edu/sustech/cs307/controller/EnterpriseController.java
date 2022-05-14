@@ -1,14 +1,12 @@
 package edu.sustech.cs307.controller;
 
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import edu.sustech.cs307.common.Result;
 import edu.sustech.cs307.entity.Enterprise;
 import edu.sustech.cs307.mapper.EnterpriseMapper;
 import edu.sustech.cs307.service.IEnterpriseService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
@@ -39,12 +37,35 @@ public class EnterpriseController {
         return this.enterpriseService.list();
     }
 
-    @GetMapping("/selectPage")
+    @GetMapping("/show")
     public Result<?> selectPage(@RequestParam(defaultValue = "1") Integer pageNum,
                                 @RequestParam(defaultValue = "20") Integer pageSize,
-                                @RequestParam(defaultValue = "") String name) {
+                                @RequestParam(defaultValue = "") String enterpriseName) {
         Page<Map<String, Object>> page = new Page<>(pageNum, pageSize);
-        return Result.success(enterpriseMapper.selectPage(page));
+        if (StrUtil.isNotBlank(enterpriseName)) {
+            return Result.success(enterpriseMapper.selectByNamePage(page, enterpriseName));
+        } else {
+            return Result.success(enterpriseMapper.selectPage(page));
+        }
+    }
+
+    @PostMapping("/addOneEnterprise")
+    public Result<?> addOneEnterprise(@RequestBody Enterprise enterprise) {
+        if (enterpriseMapper.insert(enterprise) == 1) {
+            return Result.success();
+        } else {
+            return Result.error("233", "Insert failed");
+        }
+    }
+
+    @DeleteMapping("/delete/{enterpriseName}")
+    public boolean deleteByEnterpriseName(@PathVariable String enterpriseName) {
+        return enterpriseMapper.deleteByEnterpriseName(enterpriseName);
+    }
+
+    @PutMapping("/updateEnterprise")
+    public int updateEnterprise(@RequestBody Enterprise enterprise) {
+        return enterpriseMapper.updateByEnterpriseName(enterprise);
     }
 
 }

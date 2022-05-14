@@ -30,8 +30,12 @@ public class StaffController {
     }
 
     @PostMapping("/addOneStaff")
-    public int addOneStaff(@RequestBody Staff staff) {
-        return staffMapper.insert(staff);
+    public Result<?> addOneStaff(@RequestBody Staff staff) {
+        if (staffMapper.insert(staff) == 1) {
+            return Result.success();
+        } else {
+            return Result.error("233", "Insert failed");
+        }
     }
 
     @GetMapping("/getAllStaffCount")
@@ -39,6 +43,18 @@ public class StaffController {
         List<Map<String, Object>> maps = staffMapper.getAllStaffCount();
         maps.forEach(map -> System.out.printf("staffType=%s, staffCount=%d\n", map.get("type"), (int) map.get("count")));
         return maps;
+    }
+
+    @GetMapping("/show")
+    public Result<?> show(@RequestParam(defaultValue = "1") Integer pageNum,
+                          @RequestParam(defaultValue = "20") Integer pageSize,
+                          @RequestParam(defaultValue = "") String number) {
+        Page<Map<String, Object>> page = new Page<>(pageNum, pageSize);
+        if (StrUtil.isNotBlank(number)) {
+            return Result.success(staffMapper.selectByNumberPage(page, number));
+        } else {
+            return Result.success(staffMapper.listPage(page));
+        }
     }
 
     @GetMapping("/listStaffPage")
@@ -58,7 +74,7 @@ public class StaffController {
 
     @PutMapping("/updateStaff")
     public int updateStaff(@RequestBody Staff staff) {
-        return staffMapper.updateById(staff);
+        return staffMapper.updateByName(staff);
     }
 
 }

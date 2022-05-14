@@ -8,14 +8,13 @@
       <el-button type="primary" style="margin: 5px" @click="load">查询</el-button>
     </div>
     <el-table :data="tableData" stripe border style="width: 100%">
-      <el-table-column prop="id" sortable label="id" width="50"/>
-      <el-table-column prop="name" label="姓名" width="120"/>
+      <el-table-column prop="staffName" label="姓名" width="150"/>
       <el-table-column prop="age" label="年龄" width="50"/>
       <el-table-column prop="gender" label="性别" width="80"/>
       <el-table-column prop="number" label="编号" width="100"/>
       <el-table-column prop="mobileNumber" label="电话号码" width="300"/>
       <el-table-column prop="type" label="类型" width="100"/>
-      <el-table-column prop="supplyCenterId" label="所属供应中心id" width="120"/>
+      <el-table-column prop="supplyCenterName" label="所属供应中心" width="200"/>
       <el-table-column fixed="right" label="操作" width="150">
         <template #default="scope">
           <el-button size="mini" @click="handleEdit(scope.row)">编辑</el-button>
@@ -37,7 +36,7 @@
           layout="total, sizes, prev, pager, next, jumper"
           :total="total">
       </el-pagination>
-      <el-dialog v-model="dialogVisible" title="Tips" width="30%" :before-close="handleClose">
+      <el-dialog v-model="dialogVisible" title="请输入人员信息" width="30%" :before-close="handleClose">
         <el-form model="form" label-width="120px">
           <el-form-item label="名字">
             <el-input v-model="form.name" style="width: 80%"></el-input>
@@ -91,7 +90,8 @@ export default {
       pageSize: 10,
       total: 0,
       tableData: [],
-      dialogVisible: false
+      dialogVisible: false,
+      editMode: false
     }
   },
   created() {
@@ -103,11 +103,12 @@ export default {
       this.dialogVisible = true
     },
     save() {
-      if (this.form.number) {
+      if (this.editMode) {
+        console.log(this.form.number)
         request.put("/staff/updateStaff", this.form).then(response => {
           console.log(response)
           this.dialogVisible = false
-          if (response) {
+          if (response.code === '0') {
             this.$message({
               type: "success",
               message: "编辑成功"
@@ -119,12 +120,13 @@ export default {
             })
           }
           this.load()
+          this.editMode = false
         })
       } else {
         request.post("/staff/addOneStaff", this.form).then(response => {
           console.log(response)
           this.dialogVisible = false
-          if (response) {
+          if (response.code === "0") {
             this.$message({
               type: "success",
               message: "添加成功"
@@ -140,7 +142,7 @@ export default {
       }
     },
     load() {
-      request.get("/staff/listStaffPage", {
+      request.get("/staff/show", {
         params: {
           pageNum: this.pageNum,
           pageSize: this.pageSize,
@@ -154,8 +156,8 @@ export default {
     handleEdit(row) {
       console.log('handleEdit')
       this.form = JSON.parse(JSON.stringify(row))
+      this.editMode = true
       this.dialogVisible = true
-
     },
     handleDelete(number) {
       console.log("delete" + number)

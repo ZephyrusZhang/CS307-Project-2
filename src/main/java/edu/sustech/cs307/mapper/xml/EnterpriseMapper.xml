@@ -13,4 +13,11 @@
         from enterprise
                  join center c on c.id = enterprise.supply_center_id
     </select>
+
+    <select id="selectByNamePage" resultMap="enterpriseSelectListMap">
+        select enterprise.name as enterpriseName, country, city, c.name as centerName, industry
+        from enterprise
+                 join center c on c.id = enterprise.supply_center_id
+        where enterprise.name = #{name}
+    </select>
 </mapper>

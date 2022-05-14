@@ -5,8 +5,44 @@
         <result property="type" column="type" javaType="java.lang.String"/>
         <result property="count" column="count" javaType="java.lang.Integer"/>
     </resultMap>
+    <resultMap id="listPageMap" type="java.util.Map">
+        <result property="staffName" column="staffName" javaType="java.lang.String"/>
+        <result property="age" column="age" javaType="java.lang.Integer"/>
+        <result property="gender" column="gender" javaType="java.lang.String"/>
+        <result property="number" column="number" javaType="java.lang.String"/>
+        <result property="mobileNumber" column="mobileNumber" javaType="java.lang.String"/>
+        <result property="type" column="type" javaType="java.lang.String"/>
+        <result property="supplyCenterName" column="supplyCenterName" javaType="java.lang.String"/>
+    </resultMap>
 
     <select id="getAllStaffCount" resultMap="staffTypeToStaffCntMap">
-        select type as type, count(*) as count from staff group by type
+        select type as type, count(*) as count
+        from staff
+        group by type
+    </select>
+
+    <select id="listPage" resultMap="listPageMap">
+        select staff.name    as staffName,
+               age,
+               gender,
+               number,
+               mobile_number as mobileNumber,
+               type,
+               c.name        as supplyCenterName
+        from staff
+                 join center c on c.id = staff.supply_center_id
+    </select>
+
+    <select id="selectByNumberPage" resultMap="listPageMap">
+        select staff.name    as staffName,
+               age,
+               gender,
+               number,
+               mobile_number as mobileNumber,
+               type,
+               c.name        as supplyCenterName
+        from staff
+                 join center c on c.id = staff.supply_center_id
+        where number = #{number}
     </select>
 </mapper>
