@@ -107,8 +107,10 @@ export default {
         console.log(this.form.number)
         request.put("/staff/updateStaff", this.form).then(response => {
           console.log(response)
+          console.log(this.form)
+          console.log('code = ' + response.code)
           this.dialogVisible = false
-          if (response.code === '0') {
+          if (response) {
             this.$message({
               type: "success",
               message: "编辑成功"
@@ -126,7 +128,7 @@ export default {
         request.post("/staff/addOneStaff", this.form).then(response => {
           console.log(response)
           this.dialogVisible = false
-          if (response.code === "0") {
+          if (response) {
             this.$message({
               type: "success",
               message: "添加成功"
@@ -155,7 +157,9 @@ export default {
     },
     handleEdit(row) {
       console.log('handleEdit')
+      console.log(row)
       this.form = JSON.parse(JSON.stringify(row))
+      this.form.name = row.staffName
       this.editMode = true
       this.dialogVisible = true
     },

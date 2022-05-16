@@ -36,7 +36,6 @@ public class ModelServiceImpl extends ServiceImpl<ModelMapper, Model> implements
             reader.readNext();
             while ((line = reader.readNext()) != null) {
                 Model model = new Model();
-                model.setId(Integer.parseInt(line[0]));
                 model.setNumber(line[1]);
                 model.setModelName(line[2]);
                 model.setProductName(line[3]);

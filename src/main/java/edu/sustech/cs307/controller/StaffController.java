@@ -58,7 +58,9 @@ public class StaffController {
     }
 
     @GetMapping("/listStaffPage")
-    public Result<?> listStaffPage(@RequestParam(defaultValue = "1") Integer pageNum, @RequestParam(defaultValue = "20") Integer pageSize, @RequestParam(defaultValue = "") String number) {
+    public Result<?> listStaffPage(@RequestParam(defaultValue = "1") Integer pageNum,
+                                   @RequestParam(defaultValue = "20") Integer pageSize,
+                                   @RequestParam(defaultValue = "") String number) {
         QueryWrapper<Staff> wrapper = null;
         if (StrUtil.isNotBlank(number)) {
             wrapper = new QueryWrapper<Staff>().eq("number", number);

@@ -1,22 +1,22 @@
 <template>
-
-  <div class="enterprise" style="padding: 20px 350px">
+  <div class="staff" style="padding: 20px 260px">
     <div style="margin: 10px 0">
       <el-button type="primary" @click="insert">新增</el-button>
     </div>
     <div style="margin: 10px 0">
-      <el-input v-model="enterpriseName" placeholder="请输入公司名称" style="width: 20%" clearable></el-input>
+      <el-input v-model="modelName" placeholder="请输model名称" style="width: 20%" clearable></el-input>
       <el-button type="primary" style="margin: 5px" @click="load">查询</el-button>
     </div>
-    <el-table :data="tableData" stripe border style="width: 700px">
-      <el-table-column prop="enterpriseName" sortable label="enterpriseName" width="180"/>
-      <el-table-column prop="country" label="country" width="120"/>
-      <el-table-column prop="city" label="city" width="100"/>
-      <el-table-column prop="centerName" label="centerName" width="120"/>
+    <el-table :data="tableData" stripe border style="width: 85%">
+      <el-table-column prop="number" label="产品编号" width="150"/>
+      <el-table-column prop="modelName" label="model名称" width="190"/>
+      <el-table-column prop="productName" label="产品名称" width="180"/>
+      <el-table-column prop="unitPrice" label="单价" width="80"/>
+      <el-table-column prop="sales" label="销量" width="80"/>
       <el-table-column fixed="right" label="操作" width="150">
         <template #default="scope">
           <el-button size="mini" @click="handleEdit(scope.row)">编辑</el-button>
-          <el-popconfirm title="确认删除？" @confirm="handleDelete(scope.row.enterpriseName)">
+          <el-popconfirm title="确认删除？" @confirm="handleDelete(scope.row.modelName)">
             <template #reference>
               <el-button type="danger" size="mini">删除</el-button>
             </template>
@@ -34,22 +34,22 @@
           layout="total, sizes, prev, pager, next, jumper"
           :total="total">
       </el-pagination>
-      <el-dialog v-model="dialogVisible" title="请输入公司信息" width="30%" :before-close="handleClose">
+      <el-dialog v-model="dialogVisible" title="请输入人员信息" width="30%" :before-close="handleClose">
         <el-form model="form" label-width="120px">
-          <el-form-item label="公司名称">
-            <el-input v-model="form.name" style="width: 80%"></el-input>
+          <el-form-item label="产品编号">
+            <el-input v-model="form.number" style="width: 80%"></el-input>
           </el-form-item>
-          <el-form-item label="公司所在国家">
-            <el-input v-model="form.country" style="width: 80%"></el-input>
+          <el-form-item label="model名称">
+            <el-input v-model="form.modelName" style="width: 80%"></el-input>
           </el-form-item>
-          <el-form-item label="公司所在城市">
-            <el-input v-model="form.city" style="width: 80%"></el-input>
+          <el-form-item label="产品名称">
+            <el-input v-model="form.productName" style="width: 80%"></el-input>
           </el-form-item>
-          <el-form-item label="该公司的供应中心的id">
-            <el-input v-model="form.supplyCenterId" style="width: 80%"></el-input>
+          <el-form-item label="单价">
+            <el-input v-model="form.unitPrice" style="width: 80%"></el-input>
           </el-form-item>
-          <el-form-item label="公司的工厂">
-            <el-input v-model="form.industry" style="width: 80%"></el-input>
+          <el-form-item label="销量">
+            <el-input v-model="form.sales" style="width: 80%"></el-input>
           </el-form-item>
         </el-form>
         <template #footer>
@@ -64,14 +64,13 @@
 </template>
 
 <script>
-
 import request from "@/util/request";
 
 export default {
-  name: 'Enterprise',
+  name: "Model",
   data() {
     return {
-      enterpriseName: '',
+      modelName: '',
       pageNum: 1,
       form: {},
       pageSize: 10,
@@ -89,9 +88,22 @@ export default {
       this.form = {}
       this.dialogVisible = true
     },
+    load() {
+      request.get("/model/show", {
+        params: {
+          pageNum: this.pageNum,
+          pageSize: this.pageSize,
+          modelName: this.modelName
+        }
+      }).then(response => {
+        ({records: this.tableData, total: this.total} = response.data);
+        console.log(response)
+      })
+    },
     save() {
       if (this.editMode) {
-        request.put("/enterprise/updateEnterprise", this.form).then(response => {
+        console.log(this.form.number)
+        request.put("/model/updateModel", this.form).then(response => {
           console.log(response)
           this.dialogVisible = false
           if (response) {
@@ -106,10 +118,10 @@ export default {
             })
           }
           this.load()
-          this.editMode = false;
+          this.editMode = false
         })
       } else {
-        request.post("/enterprise/addOneEnterprise", this.form).then(response => {
+        request.post("/model/addOneModel", this.form).then(response => {
           console.log(response)
           this.dialogVisible = false
           if (response) {
@@ -127,38 +139,27 @@ export default {
         })
       }
     },
-    load() {
-      request.get("/enterprise/show", {
-        params: {
-          pageNum: this.pageNum,
-          pageSize: this.pageSize,
-          enterpriseName: this.enterpriseName
-        }
-      }).then(response => {
-        ({records: this.tableData, total: this.total} = response.data);
-        console.log(response)
-      })
-    },
     handleEdit(row) {
       console.log('handleEdit')
+      console.log(row)
       this.form = JSON.parse(JSON.stringify(row))
-      this.form.name = row.enterpriseName
-      this.dialogVisible = true
+      console.log(this.form)
       this.editMode = true
+      this.dialogVisible = true
     },
-    handleDelete(enterpriseName) {
-      console.log("delete" + enterpriseName)
-      request.delete("enterprise/delete/" + enterpriseName).then(response => {
+    handleDelete(modelName) {
+      console.log("delete" + modelName)
+      request.delete("model/delete/" + modelName).then(response => {
         console.log(response)
-        if (response === true) {
+        if (response) {
           this.$message({
             type: "success",
-            message: "删除企业 " + enterpriseName + " 成功"
+            message: "删除用户 " + modelName + " 成功"
           })
         } else {
           this.$message({
             type: "error",
-            message: "删除企业 " + enterpriseName + " 失败"
+            message: "删除用户 " + modelName + " 失败"
           })
         }
         this.load()
@@ -174,9 +175,10 @@ export default {
       this.pageNum = pageNum
       this.load()
     },
-    handleClose() {
-
-    }
   }
 }
 </script>
+
+<style scoped>
+
+</style>

@@ -1,22 +1,21 @@
 <template>
 
-  <div class="enterprise" style="padding: 20px 350px">
+  <div class="center" style="padding: 20px 350px">
     <div style="margin: 10px 0">
       <el-button type="primary" @click="insert">新增</el-button>
     </div>
     <div style="margin: 10px 0">
-      <el-input v-model="enterpriseName" placeholder="请输入公司名称" style="width: 20%" clearable></el-input>
+      <el-input v-model="name" placeholder="请输入供应中心名称" style="width: 25%" clearable></el-input>
       <el-button type="primary" style="margin: 5px" @click="load">查询</el-button>
     </div>
     <el-table :data="tableData" stripe border style="width: 700px">
-      <el-table-column prop="enterpriseName" sortable label="enterpriseName" width="180"/>
-      <el-table-column prop="country" label="country" width="120"/>
-      <el-table-column prop="city" label="city" width="100"/>
-      <el-table-column prop="centerName" label="centerName" width="120"/>
+      <el-table-column prop="name" sortable label="name" width="300"/>
+      <el-table-column prop="expenditure" label="expenditure" width="120"/>
+      <el-table-column prop="revenue" label="revenue" width="100"/>
       <el-table-column fixed="right" label="操作" width="150">
         <template #default="scope">
           <el-button size="mini" @click="handleEdit(scope.row)">编辑</el-button>
-          <el-popconfirm title="确认删除？" @confirm="handleDelete(scope.row.enterpriseName)">
+          <el-popconfirm title="确认删除？" @confirm="handleDelete(scope.row.name)">
             <template #reference>
               <el-button type="danger" size="mini">删除</el-button>
             </template>
@@ -34,22 +33,16 @@
           layout="total, sizes, prev, pager, next, jumper"
           :total="total">
       </el-pagination>
-      <el-dialog v-model="dialogVisible" title="请输入公司信息" width="30%" :before-close="handleClose">
+      <el-dialog v-model="dialogVisible" title="请输入供应中心信息" width="30%" :before-close="handleClose">
         <el-form model="form" label-width="120px">
-          <el-form-item label="公司名称">
+          <el-form-item label="供应中心名称">
             <el-input v-model="form.name" style="width: 80%"></el-input>
           </el-form-item>
-          <el-form-item label="公司所在国家">
-            <el-input v-model="form.country" style="width: 80%"></el-input>
+          <el-form-item label="供应中心初始支出">
+            <el-input v-model="form.expenditure" style="width: 80%"></el-input>
           </el-form-item>
-          <el-form-item label="公司所在城市">
-            <el-input v-model="form.city" style="width: 80%"></el-input>
-          </el-form-item>
-          <el-form-item label="该公司的供应中心的id">
-            <el-input v-model="form.supplyCenterId" style="width: 80%"></el-input>
-          </el-form-item>
-          <el-form-item label="公司的工厂">
-            <el-input v-model="form.industry" style="width: 80%"></el-input>
+          <el-form-item label="供应中心初始收入">
+            <el-input v-model="form.revenue" style="width: 80%"></el-input>
           </el-form-item>
         </el-form>
         <template #footer>
@@ -64,14 +57,13 @@
 </template>
 
 <script>
-
 import request from "@/util/request";
 
 export default {
-  name: 'Enterprise',
+  name: "Center",
   data() {
     return {
-      enterpriseName: '',
+      name: '',
       pageNum: 1,
       form: {},
       pageSize: 10,
@@ -89,9 +81,23 @@ export default {
       this.form = {}
       this.dialogVisible = true
     },
+    load() {
+      request.get("/center/show", {
+        params: {
+          pageNum: this.pageNum,
+          pageSize: this.pageSize,
+          name: this.name
+        }
+      }).then(response => {
+        ({records: this.tableData, total: this.total} = response.data);
+        console.log(response)
+      })
+    },
     save() {
       if (this.editMode) {
-        request.put("/enterprise/updateEnterprise", this.form).then(response => {
+        console.log(this.form.number)
+        request.put("/center/updateCenter", this.form).then(response => {
+          console.log('编辑')
           console.log(response)
           this.dialogVisible = false
           if (response) {
@@ -106,10 +112,10 @@ export default {
             })
           }
           this.load()
-          this.editMode = false;
+          this.editMode = false
         })
       } else {
-        request.post("/enterprise/addOneEnterprise", this.form).then(response => {
+        request.post("/center/addOneCenter", this.form).then(response => {
           console.log(response)
           this.dialogVisible = false
           if (response) {
@@ -127,38 +133,25 @@ export default {
         })
       }
     },
-    load() {
-      request.get("/enterprise/show", {
-        params: {
-          pageNum: this.pageNum,
-          pageSize: this.pageSize,
-          enterpriseName: this.enterpriseName
-        }
-      }).then(response => {
-        ({records: this.tableData, total: this.total} = response.data);
-        console.log(response)
-      })
-    },
     handleEdit(row) {
       console.log('handleEdit')
       this.form = JSON.parse(JSON.stringify(row))
-      this.form.name = row.enterpriseName
-      this.dialogVisible = true
       this.editMode = true
+      this.dialogVisible = true
     },
-    handleDelete(enterpriseName) {
-      console.log("delete" + enterpriseName)
-      request.delete("enterprise/delete/" + enterpriseName).then(response => {
+    handleDelete(name) {
+      console.log("delete" + name)
+      request.delete("/center/delete/" + name).then(response => {
         console.log(response)
-        if (response === true) {
+        if (response) {
           this.$message({
             type: "success",
-            message: "删除企业 " + enterpriseName + " 成功"
+            message: "删除用户 " + name + " 成功"
           })
         } else {
           this.$message({
             type: "error",
-            message: "删除企业 " + enterpriseName + " 失败"
+            message: "删除用户 " + name + " 失败"
           })
         }
         this.load()
@@ -173,10 +166,11 @@ export default {
       console.log('handleCurrentChange')
       this.pageNum = pageNum
       this.load()
-    },
-    handleClose() {
-
     }
   }
 }
 </script>
+
+<style scoped>
+
+</style>

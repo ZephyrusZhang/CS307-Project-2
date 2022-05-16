@@ -1,5 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="edu.sustech.cs307.mapper.CenterMapper">
+    <resultMap id="selectByNamePageCenterMap" type="java.util.Map">
+        <result property="name" column="name" javaType="java.lang.String"/>
+        <result property="expenditure" column="expenditure" javaType="java.lang.Integer"/>
+        <result property="revenue" column="revenue" javaType="java.lang.Integer"/>
+    </resultMap>
+
+    <select id="selectByNamePage" resultMap="selectByNamePageCenterMap">
+        select name, expenditure, revenue
+        from center
+        where name = #{name}
+    </select>
+
+    <select id="listPage" resultMap="selectByNamePageCenterMap">
+        select name, expenditure, revenue
+        from center
+    </select>
 
 </mapper>

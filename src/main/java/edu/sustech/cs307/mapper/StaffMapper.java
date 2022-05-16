@@ -34,7 +34,7 @@ public interface StaffMapper extends BaseMapper<Staff> {
 
     Page<Map<String, Object>> listPage(Page<?> page);
 
-    Page<Map<String, Object>> selectByNumberPage(Page<?> page, @Param("number") String name);
+    Page<Map<String, Object>> selectByNumberPage(Page<?> page, @Param("number") String number);
 
     @Update("update staff " +
             "set name = #{name}, " +

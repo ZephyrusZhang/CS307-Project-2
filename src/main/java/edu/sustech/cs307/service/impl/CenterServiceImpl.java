@@ -36,7 +36,6 @@ public class CenterServiceImpl extends ServiceImpl<CenterMapper, Center> impleme
             reader.readNext();
             while ((line = reader.readNext()) != null) {
                 Center center = new Center();
-                center.setId(Integer.parseInt(line[0]));
                 center.setName(line[1]);
                 center.setExpenditure(0);
                 center.setRevenue(0);

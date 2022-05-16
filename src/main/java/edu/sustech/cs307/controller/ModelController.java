@@ -1,10 +1,12 @@
 package edu.sustech.cs307.controller;
 
+import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import edu.sustech.cs307.common.Result;
+import edu.sustech.cs307.entity.Model;
+import edu.sustech.cs307.entity.Staff;
 import edu.sustech.cs307.mapper.ModelMapper;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
@@ -47,6 +49,37 @@ public class ModelController {
         List<Map<String, Object>> maps = modelMapper.getProductByNumber(productName);
         maps.forEach(map -> System.out.printf("centerName=%s, modelName=%s, count=%d\n", map.get("centerName"), map.get("modelName"), (int) map.get("count")));
         return maps;
+    }
+
+    @GetMapping("/show")
+    public Result<?> show(@RequestParam(defaultValue = "1") Integer pageNum,
+                          @RequestParam(defaultValue = "20") Integer pageSize,
+                          @RequestParam(defaultValue = "") String modelName) {
+        Page<Map<String, Object>> page = new Page<>(pageNum, pageSize);
+        if (StrUtil.isNotBlank(modelName)) {
+            return Result.success(modelMapper.selectByModelNamePage(page, modelName));
+        } else {
+            return Result.success(modelMapper.selectPage(page));
+        }
+    }
+
+    @DeleteMapping("/delete/{modelName}")
+    public boolean deleteByModelName(@PathVariable String modelName) {
+        return modelMapper.deleteByModelName(modelName);
+    }
+
+    @PutMapping("/updateModel")
+    public int updateModel(@RequestBody Model model) {
+        return modelMapper.updateByModelName(model);
+    }
+
+    @PostMapping("/addOneModel")
+    public Result<?> addOneStaff(@RequestBody Model model) {
+        if (modelMapper.insert(model) == 1) {
+            return Result.success();
+        } else {
+            return Result.error("233", "Insert failed");
+        }
     }
 
 }

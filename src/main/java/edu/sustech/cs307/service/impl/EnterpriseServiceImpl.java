@@ -47,7 +47,6 @@ public class EnterpriseServiceImpl extends ServiceImpl<EnterpriseMapper, Enterpr
                 Enterprise enterprise = new Enterprise();
                 QueryWrapper<Center> wrapperCenter = new QueryWrapper<>();
                 wrapperCenter.eq("name", line[4]);
-                enterprise.setId(Integer.parseInt(line[0]));
                 enterprise.setName(line[1]);
                 enterprise.setCountry(line[2]);
                 enterprise.setCity(line[3]);

@@ -13,6 +13,8 @@
         </template>
         <el-menu-item index="staff">供应中心成员管理</el-menu-item>
         <el-menu-item index="enterprise">公司管理</el-menu-item>
+        <el-menu-item index="center">供应中心管理</el-menu-item>
+        <el-menu-item index="model">产品管理</el-menu-item>
       </el-submenu>
     </el-menu>
   </div>

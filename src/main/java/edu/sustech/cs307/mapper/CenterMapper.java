@@ -1,11 +1,11 @@
 package edu.sustech.cs307.mapper;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import edu.sustech.cs307.entity.Center;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
+
+import java.util.Map;
 
 /**
  * <p>
@@ -26,5 +26,18 @@ public interface CenterMapper extends BaseMapper<Center> {
 
     @Select("select * from center where name = #{name}")
     Center selectByName(@Param("name") String name);
+
+    @Update("update center " +
+            "set expenditure = #{expenditure}, " +
+            "revenue = #{revenue} " +
+            "where name = #{name}")
+    boolean updateCenterByName(Center center);
+
+    @Delete("delete from center where name = #{name}")
+    int deleteByName(@Param("name") String name);
+
+    Page<Map<String, Object>> selectByNamePage(Page<?> page, @Param("name") String name);
+
+    Page<Map<String, Object>> listPage(Page<?> page);
 
 }
