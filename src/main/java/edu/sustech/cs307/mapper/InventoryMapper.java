@@ -1,5 +1,6 @@
 package edu.sustech.cs307.mapper;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import edu.sustech.cs307.entity.Inventory;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.*;
@@ -29,6 +30,6 @@ public interface InventoryMapper extends BaseMapper<Inventory> {
     @Update("update inventory set count = count - #{soldNum} where supply_center_id = #{supplyCenterId} and product_model_id = #{productModelId}")
     void updateInventoryNum(@Param("soldNum") int soldNum, @Param("supplyCenterId") int supplyCenterId, @Param("productModelId") int productModelId);
 
-    List<Map<String, Object>> getAvgStockByCenter();
+    Page<Map<String, Object>> getAvgStockByCenter(Page<?> page);
 
 }

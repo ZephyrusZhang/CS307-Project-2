@@ -1,5 +1,6 @@
 package edu.sustech.cs307.mapper;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import edu.sustech.cs307.entity.Contract;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.*;
@@ -23,6 +24,6 @@ public interface ContractMapper extends BaseMapper<Contract> {
     void insert(@Param("contractNumber") String contractNumber, @Param("contractDate") LocalDate date,
                 @Param("contractManagerId") int contractManagerId, @Param("contractType") String contractType);
 
-    Map<String, Integer> getContractCount();
+    Page<Map<String, Object>> getContractCount(Page<?> page);
 
 }

@@ -3,7 +3,6 @@
     <el-menu
         style="width: 200px; min-height: calc(100vh - 50px)"
         default-active="staff"
-        default-openeds="system"
         router
         class="el-menu-vertical-demo">
       <el-submenu index="system">
@@ -15,6 +14,14 @@
         <el-menu-item index="enterprise">公司管理</el-menu-item>
         <el-menu-item index="center">供应中心管理</el-menu-item>
         <el-menu-item index="model">产品管理</el-menu-item>
+      </el-submenu>
+      <el-submenu index="api">
+        <template #title>
+          <i class="el-icon-platform-eleme"></i>
+          <span>信息查询</span>
+        </template>
+        <el-menu-item index="getAllStaffCount">API</el-menu-item>
+        <el-menu-item index="order">订单</el-menu-item>
       </el-submenu>
     </el-menu>
   </div>

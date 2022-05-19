@@ -30,18 +30,19 @@ public class ModelController {
     }
 
     @GetMapping("/getNeverSoldProductCount")
-    public Map<String, Integer> getNeverSoldProductCount() {
-        Map<String, Integer> map = modelMapper.getNeverSoldProductCount();
-        if (map.size() == 0) return null;
-        System.out.printf("neverSoldProductCount=%d\n", map.get("count"));
-        return map;
+    public Result<?> getNeverSoldProductCount(@RequestParam(defaultValue = "1") Integer pageNum,
+                                              @RequestParam(defaultValue = "20") Integer pageSize,
+                                              @RequestParam(defaultValue = "") String type) {
+        Page<Map<String, Object>> page = new Page<>(pageNum, pageSize);
+        return Result.success(modelMapper.getNeverSoldProductCount(page));
     }
 
     @GetMapping("/getFavoriteProductModel")
-    public List<Map<String, Object>> getFavoriteProductModel() {
-        List<Map<String, Object>> maps = modelMapper.getFavoriteProductModel();
-        maps.forEach(map -> System.out.printf("modelName=%s, modelSales=%d\n", map.get("modelName"), (int) map.get("sales")));
-        return maps;
+    public Result<?> getFavoriteProductModel(@RequestParam(defaultValue = "1") Integer pageNum,
+                                             @RequestParam(defaultValue = "20") Integer pageSize,
+                                             @RequestParam(defaultValue = "") String type) {
+        Page<Map<String, Object>> page = new Page<>(pageNum, pageSize);
+        return Result.success(modelMapper.getFavoriteProductModel(page));
     }
 
     @GetMapping("/getProductByNumber")

@@ -24,4 +24,12 @@
 
     </select>
 
+    <resultMap id="orderCountMap" type="java.util.Map">
+        <result property="count" column="count" javaType="java.lang.Integer"/>
+    </resultMap>
+
+    <select id="getOrderCount" resultMap="orderCountMap">
+        select count(*) as count from orders
+    </select>
+
 </mapper>

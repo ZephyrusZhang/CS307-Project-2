@@ -25,9 +25,9 @@ public interface ModelMapper extends BaseMapper<Model> {
     @Update("update model set sales = sales + #{soldNum} where id = #{productModelId}")
     void updateSalesNum(@Param("soldNum") int soldNum, @Param("productModelId") int productModelId);
 
-    Map<String, Integer> getNeverSoldProductCount();
+    Page<Map<String, Object>> getNeverSoldProductCount(Page<?> page);
 
-    List<Map<String, Object>> getFavoriteProductModel();
+    Page<Map<String, Object>> getFavoriteProductModel(Page<?> page);
 
     List<Map<String, Object>> getProductByNumber(@Param("productName") String productName);
 

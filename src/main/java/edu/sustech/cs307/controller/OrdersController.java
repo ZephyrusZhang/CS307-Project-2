@@ -1,9 +1,12 @@
 package edu.sustech.cs307.controller;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import edu.sustech.cs307.common.Result;
 import edu.sustech.cs307.mapper.OrdersMapper;
 import edu.sustech.cs307.service.IOrdersService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
@@ -44,10 +47,11 @@ public class OrdersController {
     }
 
     @GetMapping("/getOrderCount")
-    public Map<String, Integer> getOrderCount() {
-        Map<String, Integer> map = ordersMapper.getOrderCount();
-        System.out.printf("orderCount=%d\n", map.get("count"));
-        return map;
+    public Result<?> getOrderCount(@RequestParam(defaultValue = "1") Integer pageNum,
+                                   @RequestParam(defaultValue = "20") Integer pageSize,
+                                   @RequestParam(defaultValue = "") String type) {
+        Page<Map<String, Object>> page = new Page<>(pageNum, pageSize);
+        return Result.success(ordersMapper.getOrderCount(page));
     }
 
 }

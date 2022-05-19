@@ -30,7 +30,7 @@ public interface StaffMapper extends BaseMapper<Staff> {
     @Delete("delete from staff where number = #{number}")
     boolean deleteByNumber(@Param("number") String number);
 
-    List<Map<String, Object>> getAllStaffCount();
+    Page<Map<String, Object>> getAllStaffCount(Page<?> page);
 
     Page<Map<String, Object>> listPage(Page<?> page);
 

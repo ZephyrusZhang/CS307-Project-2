@@ -1,5 +1,6 @@
 package edu.sustech.cs307.mapper;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import edu.sustech.cs307.entity.Orders;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.*;
@@ -28,7 +29,7 @@ public interface OrdersMapper extends BaseMapper<Orders> {
                 @Param("lodgementDate") LocalDate lodgementDate,
                 @Param("salesmanId") int salesmanId);
 
-    Map<String, Integer> getOrderCount();
+    Page<Map<String, Object>> getOrderCount(Page<?> page);
 
     @Select("select count(*) from orders " +
             "where contract_number = #{contract_number} " +

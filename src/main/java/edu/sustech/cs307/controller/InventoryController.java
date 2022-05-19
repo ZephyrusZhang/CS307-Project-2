@@ -1,10 +1,13 @@
 package edu.sustech.cs307.controller;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import edu.sustech.cs307.common.Result;
 import edu.sustech.cs307.mapper.InventoryMapper;
 import edu.sustech.cs307.service.IInventoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -36,9 +39,10 @@ public class InventoryController {
     }
 
     @GetMapping("/getAvgStockByCenter")
-    public List<Map<String, Object>> getAvgStockByCenter() {
-        List<Map<String, Object>> maps = inventoryMapper.getAvgStockByCenter();
-        maps.forEach(map -> System.out.printf("centerName=%s, avg=%.1f\n", map.get("centerName"), (double) map.get("avg")));
-        return maps;
+    public Result<?> getAvgStockByCenter(@RequestParam(defaultValue = "1") Integer pageNum,
+                                         @RequestParam(defaultValue = "20") Integer pageSize,
+                                         @RequestParam(defaultValue = "") String type) {
+        Page<Map<String, Object>> page = new Page<>(pageNum, pageSize);
+        return Result.success(inventoryMapper.getAvgStockByCenter(page));
     }
 }
