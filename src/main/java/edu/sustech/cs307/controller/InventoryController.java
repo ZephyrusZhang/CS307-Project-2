@@ -45,4 +45,5 @@ public class InventoryController {
         Page<Map<String, Object>> page = new Page<>(pageNum, pageSize);
         return Result.success(inventoryMapper.getAvgStockByCenter(page));
     }
+
 }

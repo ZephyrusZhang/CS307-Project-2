@@ -29,9 +29,9 @@ const routes = [
                 component: () => import('@/views/Model')
             },
             {
-                path: 'getAllStaffCount',
-                name: 'GetAllStaffCount',
-                component: () => import('@/views/GetAllStaffCount')
+                path: 'api',
+                name: 'API',
+                component: () => import('@/views/API')
             },
             {
                 path: 'order',
