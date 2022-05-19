@@ -8,8 +8,32 @@
     </div>
     <div style="padding: 20px 0">
       <h1 tabindex="-1" style="color: dimgrey">Q2 - stockIn</h1>
-      <div style="padding: 10px 0">
+      <div style="padding: 20px 0">
         <el-upload class="el-upload" action="http://localhost:8181/main/stockIn/">
+          <el-button type="primary">上传</el-button>
+        </el-upload>
+      </div>
+    </div>
+    <div style="padding: 20px 0">
+      <h1 tabindex="-1" style="color: dimgrey">Q3 - placeOrder</h1>
+      <div style="padding: 20px 0">
+        <el-upload class="el-upload" action="http://localhost:8181/main/placeOrder/">
+          <el-button type="primary">上传</el-button>
+        </el-upload>
+      </div>
+    </div>
+    <div style="padding: 20px 0">
+      <h1 tabindex="-1" style="color: dimgrey">Q4 - updateOrder</h1>
+      <div style="padding: 20px 0">
+        <el-upload class="el-upload" action="http://localhost:8181/main/updateOrder/">
+          <el-button type="primary">上传</el-button>
+        </el-upload>
+      </div>
+    </div>
+    <div style="padding: 20px 0">
+      <h1 tabindex="-1" style="color: dimgrey">Q5 - deleteOrder</h1>
+      <div style="padding: 20px 0">
+        <el-upload class="el-upload" action="http://localhost:8181/main/deleteOrder/">
           <el-button type="primary">上传</el-button>
         </el-upload>
       </div>
