@@ -35,6 +35,8 @@ public interface ModelMapper extends BaseMapper<Model> {
 
     Page<Map<String, Object>> selectPage(Page<?> page);
 
+    Page<Map<String, Object>> getProductByNumberPage(Page<?> page, @Param("number") String number);
+
     @Delete("delete from model " +
             "where model_name = #{modelName}")
     boolean deleteByModelName(@Param("modelName") String modelName);

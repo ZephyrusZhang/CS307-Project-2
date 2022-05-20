@@ -31,16 +31,14 @@ public class ModelController {
 
     @GetMapping("/getNeverSoldProductCount")
     public Result<?> getNeverSoldProductCount(@RequestParam(defaultValue = "1") Integer pageNum,
-                                              @RequestParam(defaultValue = "20") Integer pageSize,
-                                              @RequestParam(defaultValue = "") String type) {
+                                              @RequestParam(defaultValue = "20") Integer pageSize) {
         Page<Map<String, Object>> page = new Page<>(pageNum, pageSize);
         return Result.success(modelMapper.getNeverSoldProductCount(page));
     }
 
     @GetMapping("/getFavoriteProductModel")
     public Result<?> getFavoriteProductModel(@RequestParam(defaultValue = "1") Integer pageNum,
-                                             @RequestParam(defaultValue = "20") Integer pageSize,
-                                             @RequestParam(defaultValue = "") String type) {
+                                             @RequestParam(defaultValue = "20") Integer pageSize) {
         Page<Map<String, Object>> page = new Page<>(pageNum, pageSize);
         return Result.success(modelMapper.getFavoriteProductModel(page));
     }

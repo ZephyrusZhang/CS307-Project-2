@@ -39,6 +39,20 @@
         group by center.name, m.product_name, m.model_name, i.count
     </select>
 
+    <resultMap id="getProductByNumberPageMap" type="java.util.Map">
+        <result property="centerName" column="centerName" javaType="java.lang.String"/>
+        <result property="modelName" column="modelName" javaType="java.lang.String"/>
+        <result property="quantity" column="quantity" javaType="java.lang.Integer"/>
+    </resultMap>
+    <select id="getProductByNumberPage" resultMap="getProductByNumberPageMap">
+        select center.name as centerName, m.model_name as modelName, i.count as quantity
+        from center
+                 join inventory i on center.id = i.supply_center_id
+                 join model m on m.id = i.product_model_id
+        where number = #{number}
+        group by center.name, m.product_name, m.model_name, i.count
+    </select>
+
     <resultMap id="selectByModelNamePageMap" type="java.util.Map">
         <result property="number" column="number" javaType="java.lang.String"/>
         <result property="modelName" column="modelName" javaType="java.lang.String"/>

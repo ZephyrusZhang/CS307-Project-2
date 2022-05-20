@@ -59,15 +59,15 @@
     </div>
     <div style="padding: 20px 0">
       <h1 tabindex="-1" style="color: dimgrey">Q9</h1>
-      <el-table :data="tableData_NeverSoldProductCount" size="large" stripe border style="width: 196px">
-        <el-table-column prop="count" label="Never Sold Product Count" width="194"/>
+      <el-table :data="tableData_NeverSoldProductCount" size="large" stripe border style="width: 212px">
+        <el-table-column prop="count" label="Never Sold Product Count" width="210"/>
       </el-table>
     </div>
     <div style="padding: 20px 0">
       <h1 tabindex="-1" style="color: dimgrey">Q10</h1>
       <el-table :data="tableData_FavoriteProductModel" size="large" stripe border style="width: 392px">
-        <el-table-column prop="modelName" label="modelName" width="210"/>
-        <el-table-column prop="sales" label="sales" width="180"/>
+        <el-table-column prop="modelName" label="Model Name" width="210"/>
+        <el-table-column prop="sales" label="Sales" width="180"/>
       </el-table>
     </div>
     <div style="padding: 20px 0">
@@ -78,8 +78,25 @@
       </el-table>
     </div>
     <div style="padding: 20px 0">
-      <h1 tabindex="-1" style="color: dimgrey">Q12</h1>
-      <el-table :data="tableData_getAvgStockByCenter" size="large" stripe border style="width: 390px">
+      <h1 tabindex="-1" style="color: dimgrey">Q12 - getProductByNumber</h1>
+      <div style="margin: 10px 0">
+        <el-input v-model="number" placeholder="请输model number" style="width: 20%" clearable></el-input>
+        <el-button type="primary" style="margin: 5px" @click="loadGetProductByNumber">查询</el-button>
+      </div>
+      <el-table :data="tableData_getProductByNumber" size="large" stripe border style="width: 551px">
+        <el-table-column prop="centerName" label="供应中心" width="200px"/>
+        <el-table-column prop="modelName" label="model名称" width="200px"/>
+        <el-table-column prop="quantity" label="数量" width="150px"/>
+      </el-table>
+    </div>
+    <div style="padding: 20px 0">
+      <h1 tabindex="-1" style="color: dimgrey">Q13 - getContractInfo</h1>
+      <div style="margin: 10px 0">
+        <el-input v-model="contractNumber" placeholder="请输入contract number" style="width: 20%" clearable></el-input>
+        <el-button type="primary" style="margin: 5px" @click="loadGetContractInfo">查询</el-button>
+      </div>
+      <el-table :data="tableData_getContractInfo" size="large" stripe border style="width: 500px">
+
       </el-table>
     </div>
   </div>
@@ -93,6 +110,7 @@ export default {
   data() {
     return {
       type: '',
+      number: '',
       pageNum: 1,
       form: {},
       pageSize: 10,
@@ -103,6 +121,7 @@ export default {
       tableData_NeverSoldProductCount: [],
       tableData_FavoriteProductModel: [],
       tableData_getAvgStockByCenter: [],
+      tableData_getProductByNumber: [],
       dialogVisible: false,
       editMode: false
     }
@@ -116,6 +135,18 @@ export default {
     this.load_getAvgStockByCenter()
   },
   methods: {
+    loadGetProductByNumber() {
+      request.get("/main/getProductByNumber", {
+        params: {
+          pageNum: this.pageNum,
+          pageSize: this.pageSize,
+          number: this.number
+        }
+      }).then(response => {
+        console.log(response)
+        this.tableData_getProductByNumber = response.data.records
+      })
+    },
     init() {
       request.get("/main/init").then(response => {
         console.log(response)

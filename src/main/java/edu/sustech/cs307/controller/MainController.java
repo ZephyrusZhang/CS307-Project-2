@@ -1,8 +1,12 @@
 package edu.sustech.cs307.controller;
 
 import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import edu.sustech.cs307.common.Result;
+import edu.sustech.cs307.mapper.ModelMapper;
 import edu.sustech.cs307.service.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -10,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/main")
@@ -22,18 +27,22 @@ public class MainController {
     private final IInventoryService iInventoryService;
     private final IOrdersService iOrdersService;
 
+    private final ModelMapper modelMapper;
+
     public MainController(ICenterService iCenterService,
                           IEnterpriseService iEnterpriseService,
                           IModelService iModelService,
                           IStaffService iStaffService,
                           IInventoryService iInventoryService,
-                          IOrdersService iOrdersService) {
+                          IOrdersService iOrdersService,
+                          ModelMapper modelMapper) {
         this.iCenterService = iCenterService;
         this.iEnterpriseService = iEnterpriseService;
         this.iModelService = iModelService;
         this.iStaffService = iStaffService;
         this.iInventoryService = iInventoryService;
         this.iOrdersService = iOrdersService;
+        this.modelMapper = modelMapper;
     }
 
     @GetMapping("/init")
@@ -87,6 +96,18 @@ public class MainController {
             e.printStackTrace();
         }
         return Result.success(iOrdersService.deleteOrder("src/main/resources/files/deleteOrderData.csv"));
+    }
+
+    @GetMapping("/getProductByNumber")
+    public Result<?> getProductByNumber(@RequestParam(defaultValue = "1") Integer pageNum,
+                                        @RequestParam(defaultValue = "20") Integer pageSize,
+                                        @RequestParam(defaultValue = "") String number) {
+        Page<Map<String, Object>> page = new Page<>(pageNum, pageSize);
+        if (StrUtil.isNotBlank(number)) {
+            return Result.success(modelMapper.getProductByNumberPage(page, number));
+        } else {
+            return Result.success();
+        }
     }
 
 }
