@@ -30,8 +30,7 @@ public class ContractController {
 
     @GetMapping("/getContractCount")
     public Result<?> getContractCount(@RequestParam(defaultValue = "1") Integer pageNum,
-                                      @RequestParam(defaultValue = "20") Integer pageSize,
-                                      @RequestParam(defaultValue = "") String type) {
+                                      @RequestParam(defaultValue = "20") Integer pageSize) {
         Page<Map<String, Object>> page = new Page<>(pageNum, pageSize);
         return Result.success(contractMapper.getContractCount(page));
     }

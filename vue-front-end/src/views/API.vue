@@ -1,5 +1,5 @@
 <template>
-  <div class="API" style="padding: 20px 200px">
+  <div class="api" style="padding: 20px 200px">
     <div style="padding: 10px 0">
       <h1 tabindex="-1" style="color: dimgrey">Initialization</h1>
       <div style="padding: 10px 0">
@@ -39,7 +39,7 @@
       </div>
     </div>
     <div style="padding: 20px 0">
-      <h1 tabindex="-1" style="color: dimgrey">Q6</h1>
+      <h1 tabindex="-1" style="color: dimgrey">Q6 - getAllStaffCount</h1>
       <el-table :data="tableData_staff" size="large" stripe border style="width: 362px">
         <el-table-column prop="type" label="Type" width="180"/>
         <el-table-column prop="count" label="Count" width="180"/>
@@ -91,13 +91,6 @@
     </div>
     <div style="padding: 20px 0">
       <h1 tabindex="-1" style="color: dimgrey">Q13 - getContractInfo</h1>
-      <div style="margin: 10px 0">
-        <el-input v-model="contractNumber" placeholder="请输入contract number" style="width: 20%" clearable></el-input>
-        <el-button type="primary" style="margin: 5px" @click="loadGetContractInfo">查询</el-button>
-      </div>
-      <el-table :data="tableData_getContractInfo" size="large" stripe border style="width: 500px">
-
-      </el-table>
     </div>
   </div>
 </template>
@@ -116,7 +109,7 @@ export default {
       pageSize: 10,
       total: 4,
       tableData_staff: [],
-      tableDate_contract: [],
+      tableData_contract: [],
       tableData_order: [],
       tableData_NeverSoldProductCount: [],
       tableData_FavoriteProductModel: [],
@@ -133,20 +126,9 @@ export default {
     this.load_NeverSoldProductCount();
     this.load_FavoriteProductModel();
     this.load_getAvgStockByCenter()
+    this.loadGetProductByNumber();
   },
   methods: {
-    loadGetProductByNumber() {
-      request.get("/main/getProductByNumber", {
-        params: {
-          pageNum: this.pageNum,
-          pageSize: this.pageSize,
-          number: this.number
-        }
-      }).then(response => {
-        console.log(response)
-        this.tableData_getProductByNumber = response.data.records
-      })
-    },
     init() {
       request.get("/main/init").then(response => {
         console.log(response)
@@ -164,7 +146,7 @@ export default {
       })
     },
     load_staff() {
-      request.get("/staff/getAllStaffCount", {
+      request.get("/main/getAllStaffCount", {
         params: {
           pageNum: this.pageNum,
           pageSize: this.pageSize,
@@ -176,7 +158,7 @@ export default {
       })
     },
     load_contract() {
-      request.get("/contract/getContractCount", {
+      request.get("/main/getContractCount", {
         params: {
           pageNum: this.pageNum,
           pageSize: this.pageSize,
@@ -188,7 +170,7 @@ export default {
       })
     },
     load_order() {
-      request.get("/orders/getOrderCount", {
+      request.get("/main/getOrderCount", {
         params: {
           pageNum: this.pageNum,
           pageSize: this.pageSize,
@@ -200,7 +182,7 @@ export default {
       })
     },
     load_NeverSoldProductCount() {
-      request.get("/model/getNeverSoldProductCount", {
+      request.get("/main/getNeverSoldProductCount", {
         params: {
           pageNum: this.pageNum,
           pageSize: this.pageSize,
@@ -212,7 +194,7 @@ export default {
       })
     },
     load_FavoriteProductModel() {
-      request.get("/model/getFavoriteProductModel", {
+      request.get("/main/getFavoriteProductModel", {
         params: {
           pageNum: this.pageNum,
           pageSize: this.pageSize,
@@ -224,7 +206,7 @@ export default {
       })
     },
     load_getAvgStockByCenter() {
-      request.get("/inventory/getAvgStockByCenter", {
+      request.get("/main/getAvgStockByCenter", {
         params: {
           pageNum: this.pageNum,
           pageSize: this.pageSize,
@@ -234,8 +216,20 @@ export default {
         ({records: this.tableData_getAvgStockByCenter, total: this.total} = response.data);
         console.log(response)
       })
+    },
+    loadGetProductByNumber() {
+      request.get("/main/getProductByNumber", {
+        params: {
+          pageNum: this.pageNum,
+          pageSize: this.pageSize,
+          number: this.number
+        }
+      }).then(response => {
+        console.log(response)
+        this.tableData_getProductByNumber = response.data.records
+      })
     }
-  }
+  },
 }
 </script>
 

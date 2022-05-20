@@ -4,7 +4,7 @@ import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import edu.sustech.cs307.common.Result;
-import edu.sustech.cs307.mapper.ModelMapper;
+import edu.sustech.cs307.mapper.*;
 import edu.sustech.cs307.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,6 +28,10 @@ public class MainController {
     private final IOrdersService iOrdersService;
 
     private final ModelMapper modelMapper;
+    private final StaffMapper staffMapper;
+    private final ContractMapper contractMapper;
+    private final OrdersMapper ordersMapper;
+    private final InventoryMapper inventoryMapper;
 
     public MainController(ICenterService iCenterService,
                           IEnterpriseService iEnterpriseService,
@@ -35,7 +39,11 @@ public class MainController {
                           IStaffService iStaffService,
                           IInventoryService iInventoryService,
                           IOrdersService iOrdersService,
-                          ModelMapper modelMapper) {
+                          ModelMapper modelMapper,
+                          StaffMapper staffMapper,
+                          ContractMapper contractMapper,
+                          OrdersMapper ordersMapper,
+                          InventoryMapper inventoryMapper) {
         this.iCenterService = iCenterService;
         this.iEnterpriseService = iEnterpriseService;
         this.iModelService = iModelService;
@@ -43,6 +51,10 @@ public class MainController {
         this.iInventoryService = iInventoryService;
         this.iOrdersService = iOrdersService;
         this.modelMapper = modelMapper;
+        this.staffMapper = staffMapper;
+        this.contractMapper = contractMapper;
+        this.ordersMapper = ordersMapper;
+        this.inventoryMapper = inventoryMapper;
     }
 
     @GetMapping("/init")
@@ -96,6 +108,49 @@ public class MainController {
             e.printStackTrace();
         }
         return Result.success(iOrdersService.deleteOrder("src/main/resources/files/deleteOrderData.csv"));
+    }
+
+    @GetMapping("/getAllStaffCount")
+    public Result<?> getAllStaffCount(@RequestParam(defaultValue = "1") Integer pageNum,
+                                      @RequestParam(defaultValue = "20") Integer pageSize) {
+        Page<Map<String, Object>> page = new Page<>(pageNum, pageSize);
+
+        return Result.success(staffMapper.getAllStaffCount(page));
+    }
+
+    @GetMapping("/getContractCount")
+    public Result<?> getContractCount(@RequestParam(defaultValue = "1") Integer pageNum,
+                                      @RequestParam(defaultValue = "20") Integer pageSize) {
+        Page<Map<String, Object>> page = new Page<>(pageNum, pageSize);
+        return Result.success(contractMapper.getContractCount(page));
+    }
+
+    @GetMapping("/getOrderCount")
+    public Result<?> getOrderCount(@RequestParam(defaultValue = "1") Integer pageNum,
+                                   @RequestParam(defaultValue = "20") Integer pageSize) {
+        Page<Map<String, Object>> page = new Page<>(pageNum, pageSize);
+        return Result.success(ordersMapper.getOrderCount(page));
+    }
+
+    @GetMapping("/getNeverSoldProductCount")
+    public Result<?> getNeverSoldProductCount(@RequestParam(defaultValue = "1") Integer pageNum,
+                                              @RequestParam(defaultValue = "20") Integer pageSize) {
+        Page<Map<String, Object>> page = new Page<>(pageNum, pageSize);
+        return Result.success(modelMapper.getNeverSoldProductCount(page));
+    }
+
+    @GetMapping("/getFavoriteProductModel")
+    public Result<?> getFavoriteProductModel(@RequestParam(defaultValue = "1") Integer pageNum,
+                                             @RequestParam(defaultValue = "20") Integer pageSize) {
+        Page<Map<String, Object>> page = new Page<>(pageNum, pageSize);
+        return Result.success(modelMapper.getFavoriteProductModel(page));
+    }
+
+    @GetMapping("/getAvgStockByCenter")
+    public Result<?> getAvgStockByCenter(@RequestParam(defaultValue = "1") Integer pageNum,
+                                         @RequestParam(defaultValue = "20") Integer pageSize) {
+        Page<Map<String, Object>> page = new Page<>(pageNum, pageSize);
+        return Result.success(inventoryMapper.getAvgStockByCenter(page));
     }
 
     @GetMapping("/getProductByNumber")

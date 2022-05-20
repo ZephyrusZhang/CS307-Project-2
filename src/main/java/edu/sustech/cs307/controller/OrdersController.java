@@ -48,8 +48,7 @@ public class OrdersController {
 
     @GetMapping("/getOrderCount")
     public Result<?> getOrderCount(@RequestParam(defaultValue = "1") Integer pageNum,
-                                   @RequestParam(defaultValue = "20") Integer pageSize,
-                                   @RequestParam(defaultValue = "") String type) {
+                                   @RequestParam(defaultValue = "20") Integer pageSize) {
         Page<Map<String, Object>> page = new Page<>(pageNum, pageSize);
         return Result.success(ordersMapper.getOrderCount(page));
     }

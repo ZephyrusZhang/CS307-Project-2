@@ -20,7 +20,7 @@
           <i class="el-icon-platform-eleme"></i>
           <span>信息查询</span>
         </template>
-        <el-menu-item index="API">API</el-menu-item>
+        <el-menu-item index="api">API</el-menu-item>
         <el-menu-item index="order">订单</el-menu-item>
       </el-submenu>
     </el-menu>
