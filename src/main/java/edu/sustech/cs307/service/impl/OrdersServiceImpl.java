@@ -98,28 +98,27 @@ public class OrdersServiceImpl extends ServiceImpl<OrdersMapper, Orders> impleme
             String[] line;
             reader.readNext();
             while ((line = reader.readNext()) != null) {
-                String[] line1 = line[0].split("\t");
 
-                Model model = modelMapper.selectByName(line1[1]);
-                Staff staff = staffMapper.selectByNumber(line1[2]);
-                int quantity = Integer.parseInt(line1[3]);
-                LocalDate estimate_delivery_date = LocalDate.parse(line1[4]);
-                LocalDate lodgement_date = LocalDate.parse(line1[5]);
+                Model model = modelMapper.selectByName(line[1]);
+                Staff staff = staffMapper.selectByNumber(line[2]);
+                int quantity = Integer.parseInt(line[3]);
+                LocalDate estimate_delivery_date = LocalDate.parse(line[4]);
+                LocalDate lodgement_date = LocalDate.parse(line[5]);
 
-                int number=ordersMapper.select(line1[0],model.getId(),staff.getId());
+                int number=ordersMapper.select(line[0],model.getId(),staff.getId());
 
                 if(number!=0){
-                    int quantity_pre = ordersMapper.selectQuantity(line1[0],model.getId(),staff.getId());
+                    int quantity_pre = ordersMapper.selectQuantity(line[0],model.getId(),staff.getId());
                     int change = quantity-quantity_pre;
 
                     modelMapper.updateSalesNum(change,model.getId());
                     inventoryMapper.updateInventoryNum(change,staff.getSupplyCenterId(),model.getId());
 
                     if(quantity==0){
-                        ordersMapper.delete(line1[0],model.getId(),staff.getId());
+                        ordersMapper.delete(line[0],model.getId(),staff.getId());
                     }
                     else{
-                        ordersMapper.update(quantity,estimate_delivery_date,lodgement_date,line1[0],model.getId(),staff.getId());
+                        ordersMapper.update(quantity,estimate_delivery_date,lodgement_date,line[0],model.getId(),staff.getId());
 
                     }
                 }
@@ -138,11 +137,10 @@ public class OrdersServiceImpl extends ServiceImpl<OrdersMapper, Orders> impleme
             String[] line;
             reader.readNext();
             while ((line = reader.readNext()) != null) {
-                String[] line1 = line[0].split("\t");
-                Staff staff = staffMapper.selectByNumber(line1[1]);
-                int seq = Integer.parseInt(line1[2]);
+                Staff staff = staffMapper.selectByNumber(line[1]);
+                int seq = Integer.parseInt(line[2]);
 
-                Map<String, Object> map = ordersMapper.getDeleteOrder(line1[0], staff.getId(), seq);
+                Map<String, Object> map = ordersMapper.getDeleteOrder(line[0], staff.getId(), seq);
                 if (map != null) {
 
                     String contract_number = (String) map.get("contract_number");
@@ -154,7 +152,7 @@ public class OrdersServiceImpl extends ServiceImpl<OrdersMapper, Orders> impleme
                     int change = -quantity_pre;
                     modelMapper.updateSalesNum(change, product_model_id);
                     inventoryMapper.updateInventoryNum(change, staff.getSupplyCenterId(), product_model_id);
-                    ordersMapper.delete(line1[0], product_model_id, staff.getId());
+                    ordersMapper.delete(line[0], product_model_id, staff.getId());
 
 
                 }
