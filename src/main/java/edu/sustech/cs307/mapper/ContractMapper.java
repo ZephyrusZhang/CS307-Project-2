@@ -26,4 +26,8 @@ public interface ContractMapper extends BaseMapper<Contract> {
 
     Page<Map<String, Object>> getContractCount(Page<?> page);
 
+    Page<Map<String, Object>> getContractInfo(Page<?> page, @Param("contract_number") String contract_number);
+
+    Page<Map<String, Object>> getOrderInfo(Page<?> page, @Param("contract_number") String contract_number);
+
 }

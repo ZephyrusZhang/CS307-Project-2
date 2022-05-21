@@ -91,6 +91,24 @@
     </div>
     <div style="padding: 20px 0">
       <h1 tabindex="-1" style="color: dimgrey">Q13 - getContractInfo</h1>
+      <div style="margin: 10px 0">
+        <el-input v-model="contract_number" placeholder="请输contract number" style="width: 20%" clearable></el-input>
+        <el-button type="primary" style="margin: 5px" @click="loadGetContractInfo">查询</el-button>
+      </div>
+      <el-table :data="tableData_getContractInfo" size="large" stripe border style="width: 751px">
+        <el-table-column prop="contract_number" label="合同编号" width="200px"/>
+        <el-table-column prop="staffName" label="经理" width="200px"/>
+        <el-table-column prop="enterpriseName" label="企业" width="150px"/>
+        <el-table-column prop="centerName" label="供应中心" width="150px"/>
+      </el-table>
+      <el-table :data="tableData_getOrderInfo" size="large" stripe border style="width: 1001px">
+        <el-table-column prop="modelName" label="产品型号" width="200px"/>
+        <el-table-column prop="salesmanName" label="销售员" width="200px"/>
+        <el-table-column prop="quantity" label="数量" width="150px"/>
+        <el-table-column prop="unitPrice" label="单价" width="150px"/>
+        <el-table-column prop="estimated_delivery_date" label="预定日期" width="150px"/>
+        <el-table-column prop="lodgement_date" label="实际日期" width="150px"/>
+      </el-table>
     </div>
   </div>
 </template>
@@ -104,6 +122,7 @@ export default {
     return {
       type: '',
       number: '',
+      contract_number: '',
       pageNum: 1,
       form: {},
       pageSize: 10,
@@ -115,6 +134,8 @@ export default {
       tableData_FavoriteProductModel: [],
       tableData_getAvgStockByCenter: [],
       tableData_getProductByNumber: [],
+      tableData_getContractInfo: [],
+      tableData_getOrderInfo: [],
       dialogVisible: false,
       editMode: false
     }
@@ -127,6 +148,7 @@ export default {
     this.load_FavoriteProductModel();
     this.load_getAvgStockByCenter()
     this.loadGetProductByNumber();
+    this.loadGetContractInfo();
   },
   methods: {
     init() {
@@ -227,6 +249,28 @@ export default {
       }).then(response => {
         console.log(response)
         this.tableData_getProductByNumber = response.data.records
+      })
+    },
+    loadGetContractInfo() {
+      request.get("/main/getContractInfo", {
+        params: {
+          pageNum: this.pageNum,
+          pageSize: this.pageSize,
+          contract_number: this.contract_number
+        }
+      }).then(response => {
+        console.log(response)
+        this.tableData_getContractInfo = response.data.records
+      })
+      request.get("/main/getOrderInfo", {
+        params: {
+          pageNum: this.pageNum,
+          pageSize: this.pageSize,
+          contract_number: this.contract_number
+        }
+      }).then(response => {
+        console.log(response)
+        this.tableData_getOrderInfo = response.data.records
       })
     }
   },

@@ -10,4 +10,43 @@
         select count(*) as count from contract
     </select>
 
+    <resultMap id="contractInfoMap" type="java.util.Map">
+        <result property="contract_number" column="contract_number" javaType="java.lang.String"/>
+        <result property="staffName" column="staffName" javaType="java.lang.String"/>
+        <result property="enterpriseName" column="enterpriseName" javaType="java.lang.String"/>
+        <result property="centerName" column="centerName" javaType="java.lang.String"/>
+    </resultMap>
+
+    <select id="getContractInfo" resultMap="contractInfoMap">
+        select distinct c2.contract_number as contract_number,s2.name as staffName,e.name as enterpriseName ,c.name as centerName
+        from orders
+                 join model m on m.id = orders.product_model_id
+                 join enterprise e on e.id = orders.enterprise_id
+                 join center c on c.id = e.supply_center_id
+                 join staff s on s.id = orders.salesman_id
+                 join contract c2 on orders.contract_number = c2.contract_number
+                 join staff s2 on s2.id=c2.contract_manager_id
+        where c2.contract_number = #{contract_number}
+    </select>
+
+    <resultMap id="orderInfoMap" type="java.util.Map">
+        <result property="modelName" column="modelName" javaType="java.lang.String"/>
+        <result property="salesmanName" column="salesmanName" javaType="java.lang.String"/>
+        <result property="quantity" column="quantity" javaType="java.lang.String"/>
+        <result property="unitPrice" column="unitPrice" javaType="java.lang.String"/>
+        <result property="estimated_delivery_date" column="estimated_delivery_date" javaType="java.lang.String"/>
+        <result property="lodgement_date" column="lodgement_date" javaType="java.lang.String"/>
+    </resultMap>
+
+    <select id="getOrderInfo" resultMap="orderInfoMap">
+        select distinct m.model_name as modelName,s.name as salesmanName,quantity,unit_price as unitPrice,estimated_delivery_date,lodgement_date
+        from orders
+                 join model m on m.id = orders.product_model_id
+                 join enterprise e on e.id = orders.enterprise_id
+                 join center c on c.id = e.supply_center_id
+                 join staff s on s.id = orders.salesman_id
+                 join contract c2 on orders.contract_number = c2.contract_number
+                 join staff s2 on s2.id=c2.contract_manager_id
+        where c2.contract_number = #{contract_number}
+    </select>
 </mapper>

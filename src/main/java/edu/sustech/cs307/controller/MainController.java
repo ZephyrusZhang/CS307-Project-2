@@ -164,5 +164,28 @@ public class MainController {
             return Result.success();
         }
     }
+    @GetMapping("/getContractInfo")
+    public Result<?> getContractInfo(@RequestParam(defaultValue = "1") Integer pageNum,
+                                        @RequestParam(defaultValue = "20") Integer pageSize,
+                                        @RequestParam(defaultValue = "") String contract_number) {
+        Page<Map<String, Object>> page = new Page<>(pageNum, pageSize);
+        if (StrUtil.isNotBlank(contract_number)) {
+            return Result.success(contractMapper.getContractInfo(page, contract_number));
+        } else {
+            return Result.success();
+        }
+    }
+
+    @GetMapping("/getOrderInfo")
+    public Result<?> getOrderInfo(@RequestParam(defaultValue = "1") Integer pageNum,
+                                     @RequestParam(defaultValue = "20") Integer pageSize,
+                                     @RequestParam(defaultValue = "") String contract_number) {
+        Page<Map<String, Object>> page = new Page<>(pageNum, pageSize);
+        if (StrUtil.isNotBlank(contract_number)) {
+            return Result.success(contractMapper.getOrderInfo(page, contract_number));
+        } else {
+            return Result.success();
+        }
+    }
 
 }
