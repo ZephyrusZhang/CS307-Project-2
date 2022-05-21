@@ -9,18 +9,14 @@
     </resultMap>
 
     <select id="getDeleteOrder" resultMap="deleteOrderMap">
-        select contract_number, product_model_id, salesman_id
-        from (select contract_number,
-                     salesman_id,
-                     model_name,
-                     product_model_id,
-                     rank()
-                     over (partition by contract_number,salesman_id,product_model_id order by estimated_delivery_date,model_name) r
-              from orders
-                       join model m on m.id = orders.product_model_id
-              where contract_number = #{contract_number}
-                and salesman_id = #{salesman_id}) sub
-        where sub.r = #{seq};
+        select contract_number,product_model_id,salesman_id
+        from (
+                 select contract_number,salesman_id,model_name,product_model_id,estimated_delivery_date,model_name,
+                        rank() over (order by estimated_delivery_date,model_name) r
+                 from orders
+                          join model m on m.id = orders.product_model_id
+                 where contract_number = #{contract_number} and salesman_id = #{salesman_id}) sub
+        where sub.r= #{seq} ;
 
     </select>
 
