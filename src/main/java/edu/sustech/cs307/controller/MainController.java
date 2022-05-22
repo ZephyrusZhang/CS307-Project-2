@@ -188,4 +188,17 @@ public class MainController {
         }
     }
 
+    @GetMapping("/getOrder")
+    public Result<?> getOrder(@RequestParam(defaultValue = "1") Integer pageNum,
+                              @RequestParam(defaultValue = "20") Integer pageSize,
+                              @RequestParam(defaultValue = "%") String contract_number,
+                              @RequestParam(defaultValue = "%") String enterpriseName,
+                              @RequestParam(defaultValue = "%") String centerName,
+                              @RequestParam(defaultValue = "%") String modelName
+                              ) {
+        Page<Map<String, Object>> page = new Page<>(pageNum, pageSize);
+
+            return Result.success(contractMapper.getOrder(page, contract_number,enterpriseName,centerName,modelName));
+    }
+
 }

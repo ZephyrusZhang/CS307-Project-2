@@ -2,66 +2,91 @@
 
   <div class="order" style="padding: 20px 100px">
     <div style="margin: 10px 0">
-      <el-button type="primary" @click="insert">新增</el-button>
-    </div>
-    <div style="margin: 10px 0">
-      <el-input v-model="name" placeholder="请输入供应中心名称" style="width: 25%" clearable></el-input>
+      <el-input v-model="contract_number" placeholder="请输入合同编号" style="width: 15%" clearable></el-input>
+      <el-input v-model="enterpriseName" placeholder="请输入企业" style="width: 15%" clearable></el-input>
+      <el-input v-model="centerName" placeholder="供应中心" style="width: 15%" clearable></el-input>
+      <el-input v-model="modelName" placeholder="请输入产品型号" style="width: 15%" clearable></el-input>
       <el-button type="primary" style="margin: 5px" @click="load">查询</el-button>
     </div>
     <el-table :data="tableData" stripe border style="width: 1000px">
-      <el-table-column prop="contract_number" sortable label="contract_number" width="200"/>
-      <el-table-column prop="enterprise" label="enterprise" width="120"/>
-      <el-table-column prop="product_model" label="product_model" width="100"/>
-      <el-table-column prop="quantity" label="quantity" width="100"/>
-      <el-table-column prop="estimated_delivery_date" label="estimated_delivery_date" width="100"/>
-      <el-table-column prop="lodgement_date" label="lodgement_date" width="100"/>
-      <el-table-column fixed="right" label="操作" width="150">
-        <template #default="scope">
-          <el-button size="mini" @click="handleEdit(scope.row)">编辑</el-button>
-          <el-popconfirm title="确认删除？" @confirm="handleDelete(scope.row.name)">
-            <template #reference>
-              <el-button type="danger" size="mini">删除</el-button>
-            </template>
-          </el-popconfirm>
-        </template>
-      </el-table-column>
+      <el-table-column prop="contract_number" label="合同编号" width="200px"/>
+      <el-table-column prop="staffName" label="经理" width="200px"/>
+      <el-table-column prop="enterpriseName" label="企业" width="150px"/>
+      <el-table-column prop="centerName" label="供应中心" width="150px"/>
+      <el-table-column prop="modelName" label="产品型号" width="200px"/>
+      <el-table-column prop="salesmanName" label="销售员" width="200px"/>
+      <el-table-column prop="quantity" label="数量" width="150px"/>
+      <el-table-column prop="unitPrice" label="单价" width="150px"/>
+      <el-table-column prop="estimated_delivery_date" label="预定日期" width="150px"/>
+      <el-table-column prop="lodgement_date" label="实际日期" width="150px"/>
     </el-table>
+
     <div style="margin: 20px 0">
       <el-pagination
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
           :current-page="pageNum"
-          :page-sizes="[5, 10, 15, 20]"
+          :page-sizes="[5, 10, 15, 20, 50]"
           :page-size="pageSize"
           layout="total, sizes, prev, pager, next, jumper"
           :total="total">
       </el-pagination>
-      <el-dialog v-model="dialogVisible" title="请输入供应中心信息" width="30%" :before-close="handleClose">
-        <el-form model="form" label-width="120px">
-          <el-form-item label="供应中心名称">
-            <el-input v-model="form.name" style="width: 80%"></el-input>
-          </el-form-item>
-          <el-form-item label="供应中心初始支出">
-            <el-input v-model="form.expenditure" style="width: 80%"></el-input>
-          </el-form-item>
-          <el-form-item label="供应中心初始收入">
-            <el-input v-model="form.revenue" style="width: 80%"></el-input>
-          </el-form-item>
-        </el-form>
-        <template #footer>
-          <span class="dialog-footer">
-            <el-button @click="dialogVisible = false">取消</el-button>
-            <el-button type="primary" @click="save">确定</el-button>
-          </span>
-        </template>
-      </el-dialog>
+
     </div>
   </div>
 </template>
 
 <script>
+import request from "@/util/request";
+
 export default {
-  name: "Order"
+  name: "Order",
+  data(){
+    return {
+      number: '',
+      pageNum: 1,
+      form: {},
+      pageSize: 100,
+      total: 0,
+      tableData: [],
+      contract_number: '',
+      enterpriseName: '',
+      centerName: '',
+      modelName: '',
+      dialogVisible: false,
+      editMode: false
+    }
+  },
+  created() {
+    this.load();
+  },
+  methods:{
+    load(){
+      request.get("/main/getOrder", {
+        params: {
+          pageNum: this.pageNum,
+          pageSize: this.pageSize,
+          contract_number: this.contract_number+'%',
+          enterpriseName: this.enterpriseName+'%',
+          centerName: this.centerName+'%',
+          modelName: this.modelName+'%',
+        }
+      }).then(response => {
+        console.log(response)
+        this.tableData= response.data.records
+      })
+    },
+    handleSizeChange(pageSize) {
+      console.log('handleSizeChange')
+      this.pageSize = pageSize
+      this.load()
+    },
+    handleCurrentChange(pageNum) {
+      console.log('handleCurrentChange')
+      this.pageNum = pageNum
+      this.load()
+    }
+  }
 }
 </script>
 
