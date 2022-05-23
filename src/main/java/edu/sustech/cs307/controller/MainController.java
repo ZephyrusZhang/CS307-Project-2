@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import edu.sustech.cs307.common.Result;
 import edu.sustech.cs307.mapper.*;
 import edu.sustech.cs307.service.*;
+import edu.sustech.cs307.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.Map;
 
 @RestController
@@ -199,6 +201,18 @@ public class MainController {
         Page<Map<String, Object>> page = new Page<>(pageNum, pageSize);
 
             return Result.success(contractMapper.getOrder(page, contract_number,enterpriseName,centerName,modelName));
+    }
+    @GetMapping("/getContract")
+    public Result<?> getContract(@RequestParam(defaultValue = "1") Integer pageNum,
+                                     @RequestParam(defaultValue = "20") Integer pageSize,
+                                     @RequestParam(defaultValue = "") String contract_number) {
+        Page<Map<String, Object>> page = new Page<>(pageNum, pageSize);
+        return Result.success(contractMapper.getContract(page));
+    }
+
+    @GetMapping("/updateDate")
+    public void updateDate(@RequestParam(defaultValue = "") String contract_date) {
+        contractMapper.updateDate(Util.strToLocalDate(contract_date));
     }
 
 }
