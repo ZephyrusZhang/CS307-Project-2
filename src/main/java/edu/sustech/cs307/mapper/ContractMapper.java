@@ -34,6 +34,6 @@ public interface ContractMapper extends BaseMapper<Contract> {
 
     Page<Map<String, Object>> getContract(Page<?> page);
 
-    @Update("update contract set contract_type = 'Processed' where contract_date < #{contract_date} ")
+    @Update("update contract set contract_type = 'Processed' where contract_date > #{contract_date} ")
     void updateDate(@Param("contract_date") LocalDate contract_date);
 }
