@@ -91,6 +91,7 @@ public class OrdersServiceImpl extends ServiceImpl<OrdersMapper, Orders> impleme
         }
         return true;
     }
+
     public boolean updateOrder(String path) {
         try (FileInputStream fis = new FileInputStream(path);
              InputStreamReader isr = new InputStreamReader(fis, StandardCharsets.UTF_8);
@@ -105,20 +106,19 @@ public class OrdersServiceImpl extends ServiceImpl<OrdersMapper, Orders> impleme
                 LocalDate estimate_delivery_date = LocalDate.parse(line[4]);
                 LocalDate lodgement_date = LocalDate.parse(line[5]);
 
-                int number=ordersMapper.select(line[0],model.getId(),staff.getId());
+                int number = ordersMapper.select(line[0], model.getId(), staff.getId());
 
-                if(number!=0){
-                    int quantity_pre = ordersMapper.selectQuantity(line[0],model.getId(),staff.getId());
-                    int change = quantity-quantity_pre;
+                if (number != 0) {
+                    int quantity_pre = ordersMapper.selectQuantity(line[0], model.getId(), staff.getId());
+                    int change = quantity - quantity_pre;
 
-                    modelMapper.updateSalesNum(change,model.getId());
-                    inventoryMapper.updateInventoryNum(change,staff.getSupplyCenterId(),model.getId());
+                    modelMapper.updateSalesNum(change, model.getId());
+                    inventoryMapper.updateInventoryNum(change, staff.getSupplyCenterId(), model.getId());
 
-                    if(quantity==0){
-                        ordersMapper.delete(line[0],model.getId(),staff.getId());
-                    }
-                    else{
-                        ordersMapper.update(quantity,estimate_delivery_date,lodgement_date,line[0],model.getId(),staff.getId());
+                    if (quantity == 0) {
+                        ordersMapper.delete(line[0], model.getId(), staff.getId());
+                    } else {
+                        ordersMapper.update(quantity, estimate_delivery_date, lodgement_date, line[0], model.getId(), staff.getId());
 
                     }
                 }
@@ -130,7 +130,8 @@ public class OrdersServiceImpl extends ServiceImpl<OrdersMapper, Orders> impleme
         }
         return true;
     }
-    public boolean deleteOrder(String path){
+
+    public boolean deleteOrder(String path) {
         try (FileInputStream fis = new FileInputStream(path);
              InputStreamReader isr = new InputStreamReader(fis, StandardCharsets.UTF_8);
              CSVReader reader = new CSVReader(isr)) {

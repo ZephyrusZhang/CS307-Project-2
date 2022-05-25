@@ -53,6 +53,8 @@ create table staff
     constraint age_valid check ( age >= 0 )
 );
 
+create index on staff (name);
+
 create table enterprise
 (
     id               serial primary key,
