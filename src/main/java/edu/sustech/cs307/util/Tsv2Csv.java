@@ -14,7 +14,7 @@ public class Tsv2Csv {
             String[] token;
             while ((readLine = reader.readLine()) != null) {
                 token = readLine.split("\t");
-                writeLine = new StringBuilder("");
+                writeLine = new StringBuilder();
                 for (int i = 0; i < token.length - 1; i++) {
                     writeLine.append(token[i]).append(",");
                 }

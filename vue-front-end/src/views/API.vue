@@ -46,32 +46,32 @@
       </el-table>
     </div>
     <div style="padding: 20px 0">
-      <h1 tabindex="-1" style="color: dimgrey">Q7</h1>
+      <h1 tabindex="-1" style="color: dimgrey">Q7 - getContractCount</h1>
       <el-table :data="tableData_contract" size="large" stripe border style="width: 182px">
         <el-table-column prop="count" label="Contract Count" width="180"/>
       </el-table>
     </div>
     <div style="padding: 20px 0">
-      <h1 tabindex="-1" style="color: dimgrey">Q8</h1>
+      <h1 tabindex="-1" style="color: dimgrey">Q8 - getOrderCount</h1>
       <el-table :data="tableData_order" size="large" stripe border style="width: 182px">
         <el-table-column prop="count" label="Order Count" width="180"/>
       </el-table>
     </div>
     <div style="padding: 20px 0">
-      <h1 tabindex="-1" style="color: dimgrey">Q9</h1>
+      <h1 tabindex="-1" style="color: dimgrey">Q9 - getNeverSoldProductCount</h1>
       <el-table :data="tableData_NeverSoldProductCount" size="large" stripe border style="width: 212px">
         <el-table-column prop="count" label="Never Sold Product Count" width="210"/>
       </el-table>
     </div>
     <div style="padding: 20px 0">
-      <h1 tabindex="-1" style="color: dimgrey">Q10</h1>
+      <h1 tabindex="-1" style="color: dimgrey">Q10 - getFavoriteProductModel</h1>
       <el-table :data="tableData_FavoriteProductModel" size="large" stripe border style="width: 392px">
         <el-table-column prop="modelName" label="Model Name" width="210"/>
         <el-table-column prop="sales" label="Sales" width="180"/>
       </el-table>
     </div>
     <div style="padding: 20px 0">
-      <h1 tabindex="-1" style="color: dimgrey">Q11</h1>
+      <h1 tabindex="-1" style="color: dimgrey">Q11 - getAvgStockByCenter</h1>
       <el-table :data="tableData_getAvgStockByCenter" size="large" stripe border style="width: 392px">
         <el-table-column prop="centerName" label="centerName" width="210"/>
         <el-table-column prop="avg" label="avg" width="180"/>

@@ -7,7 +7,7 @@
         class="el-menu-vertical-demo">
       <el-submenu index="system">
         <template #title>
-          <i class="el-icon-platform-eleme"></i>
+          <i class="el-icon-office-building"></i>
           <span>系统管理</span>
         </template>
         <el-menu-item index="staff">供应中心成员管理</el-menu-item>
@@ -17,7 +17,7 @@
       </el-submenu>
       <el-submenu index="api">
         <template #title>
-          <i class="el-icon-platform-eleme"></i>
+          <i class="el-icon-s-finance"></i>
           <span>信息查询</span>
         </template>
         <el-menu-item index="api">API</el-menu-item>
