@@ -31,4 +31,9 @@ public interface ContractMapper extends BaseMapper<Contract> {
     Page<Map<String, Object>> getOrderInfo(Page<?> page, @Param("contract_number") String contract_number);
 
     Page<Map<String, Object>> getOrder(Page<?> page, @Param("contract_number") String contract_number, @Param("enterpriseName") String enterpriseName, @Param("centerName") String centerName, @Param("modelName") String modelName);
+
+    Page<Map<String, Object>> getContract(Page<?> page);
+
+    @Update("update contract set contract_type = 'Processed' where contract_date > #{contract_date} ")
+    void updateDate(@Param("contract_date") LocalDate contract_date);
 }

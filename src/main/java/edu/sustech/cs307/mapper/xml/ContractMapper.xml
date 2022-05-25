@@ -75,6 +75,20 @@
         where c2.contract_number like #{contract_number} and e.name like #{enterpriseName} and c.name like #{centerName} and m.model_name like #{modelName}
     </select>
 
+    <resultMap id="contractMap" type="java.util.Map">
+        <result property="contract_number" column="contract_number" javaType="java.lang.String"/>
+        <result property="contract_date" column="contract_date" javaType="java.lang.String"/>
+        <result property="contract_manager" column="contract_manager" javaType="java.lang.String"/>
+        <result property="contract_type" column="contract_type" javaType="java.lang.String"/>
+    </resultMap>
+
+    <select id="getContract" resultMap="contractMap">
+        select contract_number,contract_date,s.name as contract_manager,contract_type
+        from contract
+                 join staff s on s.id = contract.contract_manager_id
+        order by contract_date
+    </select>
+
 </mapper>
 
 

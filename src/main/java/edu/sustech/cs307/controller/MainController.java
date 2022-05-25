@@ -6,6 +6,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import edu.sustech.cs307.common.Result;
 import edu.sustech.cs307.mapper.*;
 import edu.sustech.cs307.service.*;
+import edu.sustech.cs307.util.Util;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.Map;
 
 @RestController
@@ -113,6 +116,7 @@ public class MainController {
     public Result<?> getAllStaffCount(@RequestParam(defaultValue = "1") Integer pageNum,
                                       @RequestParam(defaultValue = "20") Integer pageSize) {
         Page<Map<String, Object>> page = new Page<>(pageNum, pageSize);
+
         return Result.success(staffMapper.getAllStaffCount(page));
     }
 
@@ -162,11 +166,10 @@ public class MainController {
             return Result.success();
         }
     }
-
     @GetMapping("/getContractInfo")
     public Result<?> getContractInfo(@RequestParam(defaultValue = "1") Integer pageNum,
-                                     @RequestParam(defaultValue = "20") Integer pageSize,
-                                     @RequestParam(defaultValue = "") String contract_number) {
+                                        @RequestParam(defaultValue = "20") Integer pageSize,
+                                        @RequestParam(defaultValue = "") String contract_number) {
         Page<Map<String, Object>> page = new Page<>(pageNum, pageSize);
         if (StrUtil.isNotBlank(contract_number)) {
             return Result.success(contractMapper.getContractInfo(page, contract_number));
@@ -177,8 +180,8 @@ public class MainController {
 
     @GetMapping("/getOrderInfo")
     public Result<?> getOrderInfo(@RequestParam(defaultValue = "1") Integer pageNum,
-                                  @RequestParam(defaultValue = "20") Integer pageSize,
-                                  @RequestParam(defaultValue = "") String contract_number) {
+                                     @RequestParam(defaultValue = "20") Integer pageSize,
+                                     @RequestParam(defaultValue = "") String contract_number) {
         Page<Map<String, Object>> page = new Page<>(pageNum, pageSize);
         if (StrUtil.isNotBlank(contract_number)) {
             return Result.success(contractMapper.getOrderInfo(page, contract_number));
@@ -194,10 +197,22 @@ public class MainController {
                               @RequestParam(defaultValue = "%") String enterpriseName,
                               @RequestParam(defaultValue = "%") String centerName,
                               @RequestParam(defaultValue = "%") String modelName
-    ) {
+                              ) {
         Page<Map<String, Object>> page = new Page<>(pageNum, pageSize);
 
-        return Result.success(contractMapper.getOrder(page, contract_number, enterpriseName, centerName, modelName));
+            return Result.success(contractMapper.getOrder(page, contract_number,enterpriseName,centerName,modelName));
+    }
+    @GetMapping("/getContract")
+    public Result<?> getContract(@RequestParam(defaultValue = "1") Integer pageNum,
+                                     @RequestParam(defaultValue = "20") Integer pageSize,
+                                     @RequestParam(defaultValue = "") String contract_number) {
+        Page<Map<String, Object>> page = new Page<>(pageNum, pageSize);
+        return Result.success(contractMapper.getContract(page));
+    }
+
+    @GetMapping("/updateDate")
+    public void updateDate(@RequestParam(defaultValue = "") String contract_date) {
+        contractMapper.updateDate(Util.strToLocalDate(contract_date));
     }
 
 }

@@ -22,6 +22,7 @@
         </template>
         <el-menu-item index="api">API</el-menu-item>
         <el-menu-item index="order">订单</el-menu-item>
+        <el-menu-item index="budget">合同</el-menu-item>
       </el-submenu>
     </el-menu>
   </div>
