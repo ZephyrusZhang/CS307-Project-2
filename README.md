@@ -18,3 +18,4 @@ CS307 Project by Yudong Xie and Zephyrus Zhang
 - **HuTool: [dromara/hutool: 🍬A set of tools that keep Java sweet](https://github.com/dromara/hutool)**
 - **vue3: [vuejs/core: 🖖 Vue.js is a progressive, incrementally-adoptable JavaScript framework for building UI on the web](https://github.com/vuejs/core)**
 - **element-plus: [element-plus/element-plus: 🎉 A Vue.js 3 UI Library made by Element team](https://github.com/element-plus/element-plus)**
+- **axios: [axios/axios: Promise based HTTP client for the browser and node.js](https://github.com/axios/axios)**
