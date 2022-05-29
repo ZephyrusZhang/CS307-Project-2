@@ -76,7 +76,35 @@ constraint orders_contract_fk foreign key (contract_number) references contract 
 
 # **2. API Design**
 
-## 2.1 getAllStaffCount
+## 2.1 stockIn
+According to task1_in_stoke_test_data_publish.csv, put the information into inventory table and record table
+And we should notice that:
+(1) select the center of the salesman and it must be same as the information of the staff table
+(2) select the type of the staff and it must be salesman
+(3) select the information of center, staff and product to make sure they exist
+
+## 2.2 placeOrder
+According to task2_test_data_publish.csv, put the information into orders table and contract table
+And we should notice that:
+(1) select the inventory of the model and compare it with the quantity in the order, we should make sure inventory is more than quantity
+(2) select the type of salesman to check it whether is salesman in staff table
+(3) update the quantity in inventory and sales in model table
+
+## 2.3 updateOrder
+According to task34_update_test_data_publish.tsv, put the information into orders table and inventory table
+And we should notice that:
+(1) select the staff in order to check whether it is the same person
+(2) update the quantity in inventory and sales in model table
+(3) check the updated quantity whether is 0
+
+## 2.4 deleteOrder
+According to task34_delete_test_data_publish.tsv, put the information into orders table and inventory table
+And we should notice that:
+(1) select the staff in order to check whether it is the same person
+(2) update the quantity in inventory and sales in model table
+(3) make sure contract table does not delete contract
+
+## 2.5 getAllStaffCount
 use simple SOL language to get it
 ```xml
 <select id="getAllStaffCount" resultMap="staffTypeToStaffCntMap">
@@ -85,14 +113,14 @@ use simple SOL language to get it
         group by type
 </select>
 ```
-## 2.2 getContractCount
+## 2.6 getContractCount
 use simple SOL language to get it
 ```xml
 <select id="getContractCount" resultMap="contractCountMap">
         select count(*) as count from contract
 </select>
 ```
-## 2.3 getOrderCount
+## 2.7 getOrderCount
 use simple SOL language to get it
 ```xml
 <select id="getOrderCount" resultMap="orderCountMap">
@@ -100,7 +128,7 @@ use simple SOL language to get it
 </select>
 ```
 
-## 2.4 getNeverSoldProductCount
+## 2.8 getNeverSoldProductCount
 find the model which sales is 0 then count the number of them
 ```xml
 <select id="getNeverSoldProductCount" resultMap="neverSoldProductCountMap">
@@ -114,8 +142,8 @@ find the model which sales is 0 then count the number of them
 </select>
 ```
 
-## 2.5 getFavoriteProductModel
-find the model which has the highest sales
+## 2.9 getFavoriteProductModel
+find the model which has the highest sales, first count number of each product, then select the max
 ```xml
 <select id="getFavoriteProductModel" resultMap="favoriteProductModelMap">
     select model_name, sales
@@ -124,8 +152,9 @@ find the model which has the highest sales
 </select>
 ```
 
-## 2.6 getAvgStockByCenter
+## 2.10 getAvgStockByCenter
 count the number of products for each center and then divide the types of model
+notice we should round the result and divide the types which number more than 0
 ```xml
 <select id="getAvgStockByCenter" resultMap="avgStockInByCenterMap">
         select c.name as centerName, round(sum(count) / count(product_model_id)::numeric, 1) as avg
@@ -136,8 +165,9 @@ count the number of products for each center and then divide the types of model
 </select>
 ```
 
-## 2.7 getProductByNumber
+## 2.11 getProductByNumber
 input the number of product and then select the relevant information by it
+we should count number for each center
 ```xml
 <select id="getProductByNumber" resultMap="productByNumberMap">
         select center.name as centerName, m.model_name as modelName, i.count as count
@@ -149,8 +179,9 @@ input the number of product and then select the relevant information by it
 </select>
 ```
 
-## 2.8 getContractInfo
+## 2.12 getContractInfo
 input yhe number of contract, and select in contract table and orders table to get the information
+if there is no orders in contract, we should still show the information of the contract
 ```xml
 <select id="getContractInfo" resultMap="contractInfoMap">
         select distinct c2.contract_number as contract_number,s2.name as staffName,e.name as enterpriseName ,c.name as centerName
