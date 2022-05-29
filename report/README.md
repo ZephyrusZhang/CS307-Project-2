@@ -76,7 +76,7 @@ constraint orders_contract_fk foreign key (contract_number) references contract 
 
 # **2. API Design**
 
-## getAllStaffCount
+## 2.1 getAllStaffCount
 use simple SOL language to get it
 ```xml
 <select id="getAllStaffCount" resultMap="staffTypeToStaffCntMap">
@@ -85,14 +85,14 @@ use simple SOL language to get it
         group by type
 </select>
 ```
-## getContractCount
+## 2.2 getContractCount
 use simple SOL language to get it
 ```xml
 <select id="getContractCount" resultMap="contractCountMap">
         select count(*) as count from contract
 </select>
 ```
-## getOrderCount
+## 2.3 getOrderCount
 use simple SOL language to get it
 ```xml
 <select id="getOrderCount" resultMap="orderCountMap">
@@ -100,7 +100,7 @@ use simple SOL language to get it
 </select>
 ```
 
-## getNeverSoldProductCount
+## 2.4 getNeverSoldProductCount
 find the model which sales is 0 then count the number of them
 ```xml
 <select id="getNeverSoldProductCount" resultMap="neverSoldProductCountMap">
@@ -114,7 +114,7 @@ find the model which sales is 0 then count the number of them
 </select>
 ```
 
-## getFavoriteProductModel
+## 2.5 getFavoriteProductModel
 find the model which has the highest sales
 ```xml
 <select id="getFavoriteProductModel" resultMap="favoriteProductModelMap">
@@ -124,7 +124,7 @@ find the model which has the highest sales
 </select>
 ```
 
-## getAvgStockByCenter
+## 2.6 getAvgStockByCenter
 count the number of products for each center and then divide the types of model
 ```xml
 <select id="getAvgStockByCenter" resultMap="avgStockInByCenterMap">
@@ -136,7 +136,7 @@ count the number of products for each center and then divide the types of model
 </select>
 ```
 
-## getProductByNumber
+## 2.7 getProductByNumber
 input the number of product and then select the relevant information by it
 ```xml
 <select id="getProductByNumber" resultMap="productByNumberMap">
@@ -149,7 +149,7 @@ input the number of product and then select the relevant information by it
 </select>
 ```
 
-## getContractInfo
+## 2.8 getContractInfo
 input yhe number of contract, and select in contract table and orders table to get the information
 ```xml
 <select id="getContractInfo" resultMap="contractInfoMap">
