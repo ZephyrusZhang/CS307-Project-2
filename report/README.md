@@ -133,3 +133,60 @@ To simplify the operations of user, we add the `Initialization` button to intial
 
 <img src="./image/page-api.png" style="zoom:40%;" />
 
+## 3.5 Database Connection Pool
+
+In this project, we use connection pool [HikaiCP](https://github.com/brettwooldridge/HikariCP), which is the default connection pool appiled by **SpringBoot**. Below is some configuration of our connection pool.
+
+```yaml
+spring:
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      maximum-pool-size: 16
+      auto-commit: false
+```
+
+## 3.6 Manipulation to Database
+
+In this project, we use **[Mybatis-Plus](https://github.com/baomidou/mybatis-plus)** to implement manipulate the database using **Java**, since it can simplify development.
+
+**Mybatis-Plus** use the form of **XML** or **Annotation** to customize the **SQL** statement. Besides, it can automatically encapsulate the selected data into **Java** objects, such as `List`, `Map` or just the corresponding `entity` classes. **Mybatis-Plus** also some **Java** methods to implement the simple **CRUD** operations so that you do not need to write **SQL** again.
+
+```java
+@Mapper
+public interface CenterMapper extends BaseMapper<Center> {
+    @Update("update center set expenditure = expenditure + #{expenditure} where id = #{id}")
+    void updateExpenditure(@Param("expenditure") int expenditure, @Param("id") int id);
+    
+    @Select("select * from center where name = #{name}")
+    Center selectByName(@Param("name") String name);
+}
+```
+
+For the first function above, it use annotation `@Update` to define **update** operation, and use annotation `@Param` to define the parameters in **SQL** statement. For the **select** operation whose format is like `select * from ...` to a centain table, **Mybatis-Plus** will automatically encapsulate the data into corresponding `entity` class according to the column name.
+
+For the complex query to a certain table that you just need certain columns of query result instead of all columns of the table, the return value need to by `java.util.Map`. Each `Map` object corresponds to one row of query results, and **key** of `Map` is the column name of results, and the **value** is the column value of corresponding column name.
+
+```xml
+<resultMap id="listPageMap" type="java.util.Map">
+        <result property="staffName" column="staffName" javaType="java.lang.String"/>
+        <result property="age" column="age" javaType="java.lang.Integer"/>
+        <result property="gender" column="gender" javaType="java.lang.String"/>
+        <result property="number" column="number" javaType="java.lang.String"/>
+        <result property="mobileNumber" column="mobileNumber" javaType="java.lang.String"/>
+        <result property="type" column="type" javaType="java.lang.String"/>
+        <result property="supplyCenterName" column="supplyCenterName" javaType="java.lang.String"/>
+</resultMap>
+
+<select id="listPage" resultMap="listPageMap">
+    select staff.name    as staffName,
+    age,
+    gender,
+    number,
+    mobile_number as mobileNumber,
+    type,
+    c.name        as supplyCenterName
+    from staff
+    join center c on c.id = staff.supply_center_id
+</select>
+```
+
