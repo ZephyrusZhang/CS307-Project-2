@@ -76,8 +76,108 @@ constraint orders_contract_fk foreign key (contract_number) references contract 
 
 # **2. API Design**
 
+## getAllStaffCount
+use simple SOL language to get it
+```xml
+<select id="getAllStaffCount" resultMap="staffTypeToStaffCntMap">
+        select type as type, count(*) as count
+        from staff
+        group by type
+</select>
+```
+## getContractCount
+use simple SOL language to get it
+```xml
+<select id="getContractCount" resultMap="contractCountMap">
+        select count(*) as count from contract
+</select>
+```
+## getOrderCount
+use simple SOL language to get it
+```xml
+<select id="getOrderCount" resultMap="orderCountMap">
+  select count(*) as count from orders
+</select>
+```
 
+## getNeverSoldProductCount
+find the model which sales is 0 then count the number of them
+```xml
+<select id="getNeverSoldProductCount" resultMap="neverSoldProductCountMap">
+        select count(*) as count
+        from (select model.model_name
+              from model
+                       join center_record cr on model.id = cr.product_model_id
+              where model.sales = 0
+                and cr.quantity != 0
+              group by model.model_name) as sub
+</select>
+```
 
+## getFavoriteProductModel
+find the model which has the highest sales
+```xml
+<select id="getFavoriteProductModel" resultMap="favoriteProductModelMap">
+    select model_name, sales
+    from model
+    where sales = (select max(sales) from model)
+</select>
+```
+
+## getAvgStockByCenter
+count the number of products for each center and then divide the types of model
+```xml
+<select id="getAvgStockByCenter" resultMap="avgStockInByCenterMap">
+        select c.name as centerName, round(sum(count) / count(product_model_id)::numeric, 1) as avg
+        from inventory
+                 join center c on c.id = inventory.supply_center_id
+        group by c.name
+        order by c.name
+</select>
+```
+
+## getProductByNumber
+input the number of product and then select the relevant information by it
+```xml
+<select id="getProductByNumber" resultMap="productByNumberMap">
+        select center.name as centerName, m.model_name as modelName, i.count as count
+        from center
+                 join inventory i on center.id = i.supply_center_id
+                 join model m on m.id = i.product_model_id
+        where product_name = #{productName}
+        group by center.name, m.product_name, m.model_name, i.count
+</select>
+```
+
+## getContractInfo
+input yhe number of contract, and select in contract table and orders table to get the information
+```xml
+<select id="getContractInfo" resultMap="contractInfoMap">
+        select distinct c2.contract_number as contract_number,s2.name as staffName,e.name as enterpriseName ,c.name as centerName
+        from orders
+                 join model m on m.id = orders.product_model_id
+                 join enterprise e on e.id = orders.enterprise_id
+                 join center c on c.id = e.supply_center_id
+                 join staff s on s.id = orders.salesman_id
+                 join contract c2 on orders.contract_number = c2.contract_number
+                 join staff s2 on s2.id=c2.contract_manager_id
+        where c2.contract_number = #{contract_number}
+</select>
+
+```
+```xml
+<select id="getOrderInfo" resultMap="orderInfoMap">
+        select distinct m.model_name as modelName,s.name as salesmanName,quantity,unit_price as unitPrice,estimated_delivery_date,lodgement_date
+        from orders
+                 join model m on m.id = orders.product_model_id
+                 join enterprise e on e.id = orders.enterprise_id
+                 join center c on c.id = e.supply_center_id
+                 join staff s on s.id = orders.salesman_id
+                 join contract c2 on orders.contract_number = c2.contract_number
+                 join staff s2 on s2.id=c2.contract_manager_id
+        where c2.contract_number = #{contract_number}
+</select>
+```
 # **3. Advanced Part**
 
 ## 3.2 Design Pattern
