@@ -173,7 +173,7 @@ find the model which has the highest sales, first count number of each product, 
 ```
 
 ## 2.10 getAvgStockByCenter
-count the number of products for each center and then divide the types of model
+count the number of products for each center and then divide the types of model, 
 notice we should round the result and divide the types which number more than 0
 ```xml
 <select id="getAvgStockByCenter" resultMap="avgStockInByCenterMap">
@@ -186,7 +186,7 @@ notice we should round the result and divide the types which number more than 0
 ```
 
 ## 2.11 getProductByNumber
-input the number of product and then select the relevant information by it
+input the number of product and then select the relevant information by it, 
 we should count number for each center
 ```xml
 <select id="getProductByNumber" resultMap="productByNumberMap">
@@ -200,7 +200,7 @@ we should count number for each center
 ```
 
 ## 2.12 getContractInfo
-input yhe number of contract, and select in contract table and orders table to get the information
+input yhe number of contract, and select in contract table and orders table to get the information,
 if there is no orders in contract, we should still show the information of the contract
 ```xml
 <select id="getContractInfo" resultMap="contractInfoMap">
