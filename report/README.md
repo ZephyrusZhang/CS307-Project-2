@@ -10,9 +10,29 @@
 
 [TOC]
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # **1. Database Design**
 
-<img src="./image/orders.png" style="zoom:50%;" />
+<img src="./image/orders.png" style="zoom:30%;" />
 
 ## 1.1 `center`
 
