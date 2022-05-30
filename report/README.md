@@ -38,11 +38,11 @@
 
 `center` table has two original property: `id`, `name.`
 
-We add expenditure and revenue to update the pay and the profit of each center when we import task1_in_stoke_test_data_publish.csv, task2_test_data_publish.csv, task34_update_test_data_publish.tsv,task34_delete_test_data_publish.tsv.
+We add expenditure and revenue to update the pay and the profit of each center when we import `task1_in_stoke_test_data_publish.csv`,  `task2_test_data_publish.csv`, `task34_update_test_data_publish.tsv`, `task34_delete_test_data_publish.tsv`.
 
 ## 1.2 `enterprise`
 
-`enterprise` table has 6 original property: id, name, country, city, supply_center, industry. We use foreign key to connect it with center:
+`enterprise` table has 6 original property: `id`, `name`, `country`, `city`, `supply_center`, `industry`. We use foreign key to connect it with `center`:
 
 ```postgresql
 constraint enterprise_supply_center_fk foreign key (supply_center_id) references center (id) on delete cascade
@@ -50,13 +50,13 @@ constraint enterprise_supply_center_fk foreign key (supply_center_id) references
 
 ## 1.3 `model`
 
-`model` table has 5 original property: id, number, model_name, product_name, unit_price
+`model` table has 5 original property: `id`, `number`, `model_name`, `product_name`, `unit_price`
 
-We add sales to update the number of sales model of each model when we import task1_in_stoke_test_data_publish.csv, task2_test_data_publish.csv, task34_update_test_data_publish.tsv, task34_delete_test_data_publish.tsv.
+We add sales to update the number of sales model of each model when we import `task1_in_stoke_test_data_publish.csv`, `task2_test_data_publish.csv`, `task34_update_test_data_publish.tsv`, `task34_delete_test_data_publish.tsv`.
 
 ## 1.4 `staff`
 
-`staff` table has 5 original property:  id, name, age, gender, number, mobile_number, type, supply_center. We use foreign key to connect it with center.
+`staff` table has 5 original property:  `id`,` name`, `age`, `gender`, `number`, `mobile_number`, `type`, `supply_center`. We use foreign key to connect it with `center`.
 
 ```postgresql
 constraint center_staff_fk foreign key (supply_center_id) references center (id) on delete cascade
@@ -64,7 +64,7 @@ constraint center_staff_fk foreign key (supply_center_id) references center (id)
 
 ## 1.5 `contract`
 
-`contract` table is a new table and used to record the information of contract in task2_test_data_publish.csv. We use foreign key to connect it with staff
+`contract` table is a new table and used to record the information of contract in `task2_test_data_publish.csv`. We use foreign key to connect it with `staff`
 
 ```postgresql
 constraint contract_staff_fk foreign key (contract_manager_id) references staff (id) on delete cascade
@@ -72,7 +72,7 @@ constraint contract_staff_fk foreign key (contract_manager_id) references staff 
 
 ## 1.6 `inventory`
 
-`inventory` table is a new table and used to record the information of stock in task1_in_stoke_test_data_publish.csv, and update it in task2_test_data_publish.csv, task34_update_test_data_publish.tsv,task34_delete_test_data_publish.tsv. We use foreign key to connect it with model and supply center
+`inventory` table is a new table and used to record the information of stock in `task1_in_stoke_test_data_publish.csv`, and update it in `task2_test_data_publish.csv`, `task34_update_test_data_publish.tsv`, `task34_delete_test_data_publish.tsv`. We use foreign key to connect it with `model` and `center`
 
 ```postgresql
 constraint stock_center_fk foreign key (supply_center_id) references center (id) on delete cascade
@@ -81,11 +81,11 @@ constraint stock_model_fk foreign key (product_model_id) references model (id) o
 
 ## 1.7 `center_record`
 
-`center_record` table is a new table and used to record the information of stock in task1_in_stoke_test_data_publish.csv. We use foreign key to connect it with model, supply center and staff
+`center_record` table is a new table and used to record the information of stock in `task1_in_stoke_test_data_publish.csv`. We use foreign key to connect it with `model`, `center` and `staff`
 
 ## 1.8 `orders`
 
-`orders` table is a new table and used to record the information of each order in task1_in_stoke_test_data_publish.csv, and update it in task2_test_data_publish.csv, task34_update_test_data_publish.tsv,task34_delete_test_data_publish.tsv. We use foreign key to connect it with model, supply center, staff and contract
+`orders` table is a new table and used to record the information of each order in `task1_in_stoke_test_data_publish.csv`, and update it in `task2_test_data_publish.csv`, `task34_update_test_data_publish.tsv`, `task34_delete_test_data_publish.tsv`. We use foreign key to connect it with `model`, `center`, `staff` and `contract`.
 
 ```postgresql
 constraint orders_product_model_fk foreign key (product_model_id) references model (id) on delete cascade,
@@ -97,35 +97,35 @@ constraint orders_contract_fk foreign key (contract_number) references contract 
 # **2. API Design**
 
 ## 2.1 stockIn
-According to task1_in_stoke_test_data_publish.csv, put the information into inventory table and record table
+According to `task1_in_stoke_test_data_publish.csv`, put the information into `inventory` table and `record` table.
 And we should notice that:
 (1) select the center of the salesman and it must be same as the information of the staff table
 (2) select the type of the staff and it must be salesman
 (3) select the information of center, staff and product to make sure they exist
 
 ## 2.2 placeOrder
-According to task2_test_data_publish.csv, put the information into orders table and contract table
+According to `task2_test_data_publish.csv`, put the information into `orders` table and `contract` table.
 And we should notice that:
 (1) select the inventory of the model and compare it with the quantity in the order, we should make sure inventory is more than quantity
 (2) select the type of salesman to check it whether is salesman in staff table
 (3) update the quantity in inventory and sales in model table
 
 ## 2.3 updateOrder
-According to task34_update_test_data_publish.tsv, put the information into orders table and inventory table
+According to task34_update_test_data_publish.tsv, put the information into `orders` table and `inventory` table
 And we should notice that:
 (1) select the staff in order to check whether it is the same person
 (2) update the quantity in inventory and sales in model table
 (3) check the updated quantity whether is 0
 
 ## 2.4 deleteOrder
-According to task34_delete_test_data_publish.tsv, put the information into orders table and inventory table
+According to task34_delete_test_data_publish.tsv, put the information into `orders` table and `inventory` table
 And we should notice that:
 (1) select the staff in order to check whether it is the same person
 (2) update the quantity in inventory and sales in model table
 (3) make sure contract table does not delete contract
 
 ## 2.5 getAllStaffCount
-use simple SOL language to get it
+Use simple **SQL** language to get it.
 ```xml
 <select id="getAllStaffCount" resultMap="staffTypeToStaffCntMap">
         select type as type, count(*) as count
@@ -134,14 +134,14 @@ use simple SOL language to get it
 </select>
 ```
 ## 2.6 getContractCount
-use simple SOL language to get it
+Use simple **SQL** language to get it.
 ```xml
 <select id="getContractCount" resultMap="contractCountMap">
         select count(*) as count from contract
 </select>
 ```
 ## 2.7 getOrderCount
-use simple SOL language to get it
+Use simple **SQL** language to get it.
 ```xml
 <select id="getOrderCount" resultMap="orderCountMap">
   select count(*) as count from orders
@@ -149,7 +149,7 @@ use simple SOL language to get it
 ```
 
 ## 2.8 getNeverSoldProductCount
-find the model which sales is 0 then count the number of them
+Find the model which sales is 0 then count the number of them.
 ```xml
 <select id="getNeverSoldProductCount" resultMap="neverSoldProductCountMap">
         select count(*) as count
@@ -163,7 +163,7 @@ find the model which sales is 0 then count the number of them
 ```
 
 ## 2.9 getFavoriteProductModel
-find the model which has the highest sales, first count number of each product, then select the max
+Find the model which has the highest sales, first count number of each product, then select the max.
 ```xml
 <select id="getFavoriteProductModel" resultMap="favoriteProductModelMap">
     select model_name, sales
@@ -173,8 +173,7 @@ find the model which has the highest sales, first count number of each product, 
 ```
 
 ## 2.10 getAvgStockByCenter
-count the number of products for each center and then divide the types of model, 
-notice we should round the result and divide the types which number more than 0
+Count the number of products for each center and then divide the types of model. Notice that we should round the result and divide the types which number more than 0
 ```xml
 <select id="getAvgStockByCenter" resultMap="avgStockInByCenterMap">
         select c.name as centerName, round(sum(count) / count(product_model_id)::numeric, 1) as avg
@@ -186,8 +185,7 @@ notice we should round the result and divide the types which number more than 0
 ```
 
 ## 2.11 getProductByNumber
-input the number of product and then select the relevant information by it, 
-we should count number for each center
+Input the number of product and then select the relevant information by it. We should count number for each center
 ```xml
 <select id="getProductByNumber" resultMap="productByNumberMap">
         select center.name as centerName, m.model_name as modelName, i.count as count
@@ -200,8 +198,7 @@ we should count number for each center
 ```
 
 ## 2.12 getContractInfo
-input yhe number of contract, and select in contract table and orders table to get the information,
-if there is no orders in contract, we should still show the information of the contract
+Input yhe number of contract, and select in contract table and orders table to get the information. If there is no orders in contract, we should still show the information of the contract
 ```xml
 <select id="getContractInfo" resultMap="contractInfoMap">
         select distinct c2.contract_number as contract_number,s2.name as staffName,e.name as enterpriseName ,c.name as centerName
@@ -230,6 +227,10 @@ if there is no orders in contract, we should still show the information of the c
 </select>
 ```
 # **3. Advanced Part**
+
+## 3.1 Enhanced Usability of API
+
+
 
 ## 3.2 Design Pattern
 
