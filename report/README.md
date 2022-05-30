@@ -1,3 +1,5 @@
+
+
 <center><font size='8'><b>CS307 Project 2 - Report</b></font></center>
 
 > Group Members:
@@ -293,25 +295,25 @@ In this project, we use [**Springboot**]([Spring Boot](https://spring.io/project
 
 In this project, we also implement the front and back-end separation.  We mainly use **[vue](https://github.com/vuejs/core)** and **[element-plus](https://github.com/element-plus/element-plus)** to build the user interface (web page).
 
-<img src="./image/login-page.png" style="zoom:40%;" />
+<img src="./image/login-page.png" style="zoom:35%;" />
 
 <center>Figure 1. Login page</center>
 
 User need to enter his or her username and password to login the system.
 
-<img src="./image/page-1.png" style="zoom:40%;" />
+<img src="./image/page-1.png" style="zoom:35%;" />
 
 <center>Figure 2. Basic web page</center>
 
 The data are mainly demonstrated by the form of table. To make the interface moew beautiful, we implement the pagination function of tables by using the **Pagination InnerInterceptor** of **Mybatis-Plus**. For the basic four information tables (`staff`, `center`, `enterprise`, `product`), user can execute **CRUD** operations in web page. 
 
-<img src="./image/page-insert.png" style="zoom:40%;" />
+<img src="./image/page-insert.png" style="zoom:35%;" />
 
 <center>Figure 3. Insert data example</center>
 
 To simplify the operations of user, we add the `Initialization` button to intialize the four baisc tables at one single button. Besides, user can upload the testcase files directly in frontend page.
 
-<img src="./image/page-api.png" style="zoom:40%;" />
+<img src="./image/page-api.png" style="zoom:35%;" />
 
 ## 3.5 Database Connection Pool
 
