@@ -4,7 +4,7 @@
 >
 > ​	张闻城(12010324)
 >
-> ​	谢宇东()
+> ​	谢宇东(12011913)
 
 <font size='6'><b>目录</b></font>
 
@@ -128,16 +128,16 @@ And we should notice that:
 Use simple **SQL** language to get it.
 ```xml
 <select id="getAllStaffCount" resultMap="staffTypeToStaffCntMap">
-        select type as type, count(*) as count
-        from staff
-        group by type
+    select type as type, count(*) as count
+    from staff
+    group by type
 </select>
 ```
 ## 2.6 getContractCount
 Use simple **SQL** language to get it.
 ```xml
 <select id="getContractCount" resultMap="contractCountMap">
-        select count(*) as count from contract
+    select count(*) as count from contract
 </select>
 ```
 ## 2.7 getOrderCount
@@ -152,13 +152,13 @@ Use simple **SQL** language to get it.
 Find the model which sales is 0 then count the number of them.
 ```xml
 <select id="getNeverSoldProductCount" resultMap="neverSoldProductCountMap">
-        select count(*) as count
-        from (select model.model_name
-              from model
-                       join center_record cr on model.id = cr.product_model_id
-              where model.sales = 0
-                and cr.quantity != 0
-              group by model.model_name) as sub
+    select count(*) as count
+    from (select model.model_name
+    from model
+    join center_record cr on model.id = cr.product_model_id
+    where model.sales = 0
+    and cr.quantity != 0
+    group by model.model_name) as sub
 </select>
 ```
 
@@ -176,11 +176,11 @@ Find the model which has the highest sales, first count number of each product, 
 Count the number of products for each center and then divide the types of model. Notice that we should round the result and divide the types which number more than 0
 ```xml
 <select id="getAvgStockByCenter" resultMap="avgStockInByCenterMap">
-        select c.name as centerName, round(sum(count) / count(product_model_id)::numeric, 1) as avg
-        from inventory
-                 join center c on c.id = inventory.supply_center_id
-        group by c.name
-        order by c.name
+    select c.name as centerName, round(sum(count) / count(product_model_id)::numeric, 1) as avg
+    from inventory
+    join center c on c.id = inventory.supply_center_id
+    group by c.name
+    order by c.name
 </select>
 ```
 
@@ -188,12 +188,12 @@ Count the number of products for each center and then divide the types of model.
 Input the number of product and then select the relevant information by it. We should count number for each center
 ```xml
 <select id="getProductByNumber" resultMap="productByNumberMap">
-        select center.name as centerName, m.model_name as modelName, i.count as count
-        from center
-                 join inventory i on center.id = i.supply_center_id
-                 join model m on m.id = i.product_model_id
-        where product_name = #{productName}
-        group by center.name, m.product_name, m.model_name, i.count
+    select center.name as centerName, m.model_name as modelName, i.count as count
+    from center
+    join inventory i on center.id = i.supply_center_id
+    join model m on m.id = i.product_model_id
+    where product_name = #{productName}
+    group by center.name, m.product_name, m.model_name, i.count
 </select>
 ```
 
@@ -201,36 +201,64 @@ Input the number of product and then select the relevant information by it. We s
 Input yhe number of contract, and select in contract table and orders table to get the information. If there is no orders in contract, we should still show the information of the contract
 ```xml
 <select id="getContractInfo" resultMap="contractInfoMap">
-        select distinct c2.contract_number as contract_number,s2.name as staffName,e.name as enterpriseName ,c.name as centerName
-        from orders
-                 join model m on m.id = orders.product_model_id
-                 join enterprise e on e.id = orders.enterprise_id
-                 join center c on c.id = e.supply_center_id
-                 join staff s on s.id = orders.salesman_id
-                 join contract c2 on orders.contract_number = c2.contract_number
-                 join staff s2 on s2.id=c2.contract_manager_id
-        where c2.contract_number = #{contract_number}
+	select distinct c2.contract_number as contract_number,s2.name as staffName,e.name as enterpriseName ,c.name as centerName
+    from orders
+    join model m on m.id = orders.product_model_id
+    join enterprise e on e.id = orders.enterprise_id
+    join center c on c.id = e.supply_center_id
+    join staff s on s.id = orders.salesman_id
+    join contract c2 on orders.contract_number = c2.contract_number
+    join staff s2 on s2.id=c2.contract_manager_id
+    where c2.contract_number = #{contract_number}
 </select>
-
 ```
 ```xml
 <select id="getOrderInfo" resultMap="orderInfoMap">
-        select distinct m.model_name as modelName,s.name as salesmanName,quantity,unit_price as unitPrice,estimated_delivery_date,lodgement_date
-        from orders
-                 join model m on m.id = orders.product_model_id
-                 join enterprise e on e.id = orders.enterprise_id
-                 join center c on c.id = e.supply_center_id
-                 join staff s on s.id = orders.salesman_id
-                 join contract c2 on orders.contract_number = c2.contract_number
-                 join staff s2 on s2.id=c2.contract_manager_id
-        where c2.contract_number = #{contract_number}
+    select distinct m.model_name as modelName,s.name as salesmanName,quantity,unit_price as unitPrice,estimated_delivery_date,lodgement_date
+    from orders
+    join model m on m.id = orders.product_model_id
+    join enterprise e on e.id = orders.enterprise_id
+    join center c on c.id = e.supply_center_id
+    join staff s on s.id = orders.salesman_id
+    join contract c2 on orders.contract_number = c2.contract_number
+    join staff s2 on s2.id=c2.contract_manager_id
+    where c2.contract_number = #{contract_number}
 </select>
 ```
 # **3. Advanced Part**
 
 ## 3.1 Enhanced Usability of API
 
+(1) Query the order list based on multiple parameters, and the parameterscan be null or not.
 
+   ```xml
+<select id="getOrder" resultMap="orderMap">
+    select distinct c2.contract_number as contract_number,s2.name as staffName,e.name as enterpriseName ,c.name as centerName, m.model_name as modelName,s.name as salesmanName,quantity,unit_price as unitPrice,estimated_delivery_date,lodgement_date
+    from orders
+    join model m on m.id = orders.product_model_id
+    join enterprise e on e.id = orders.enterprise_id
+    join center c on c.id = e.supply_center_id
+    join staff s on s.id = orders.salesman_id
+    join contract c2 on orders.contract_number = c2.contract_number
+    join staff s2 on s2.id=c2.contract_manager_id
+    where c2.contract_number like #{contract_number} and e.name like #{enterpriseName} and c.name like #{centerName} and m.model_name like #{modelName}
+</select>
+   ```
+
+   use like "?......" to query the order list based on multiple parameters, and the parameterscan be null or not.
+
+(2) Design the Bill Module
+
+   add and update the expenditure and revenue in the center table
+
+(3) Design a mechanism to change order status according to time and date.
+
+   ```java
+@Update("update contract set contract_type = 'Processed' where contract_date > #{contract_date} ")
+void updateDate(@Param("contract_date") LocalDate contract_date);
+   ```
+
+set the contract later than date to "processed", and earlier than date to 'finished'
 
 ## 3.2 Design Pattern
 
@@ -320,13 +348,13 @@ For the complex query to a certain table that you just need certain columns of q
 
 ```xml
 <resultMap id="listPageMap" type="java.util.Map">
-        <result property="staffName" column="staffName" javaType="java.lang.String"/>
-        <result property="age" column="age" javaType="java.lang.Integer"/>
-        <result property="gender" column="gender" javaType="java.lang.String"/>
-        <result property="number" column="number" javaType="java.lang.String"/>
-        <result property="mobileNumber" column="mobileNumber" javaType="java.lang.String"/>
-        <result property="type" column="type" javaType="java.lang.String"/>
-        <result property="supplyCenterName" column="supplyCenterName" javaType="java.lang.String"/>
+    <result property="staffName" column="staffName" javaType="java.lang.String"/>
+    <result property="age" column="age" javaType="java.lang.Integer"/>
+    <result property="gender" column="gender" javaType="java.lang.String"/>
+    <result property="number" column="number" javaType="java.lang.String"/>
+    <result property="mobileNumber" column="mobileNumber" javaType="java.lang.String"/>
+    <result property="type" column="type" javaType="java.lang.String"/>
+    <result property="supplyCenterName" column="supplyCenterName" javaType="java.lang.String"/>
 </resultMap>
 
 <select id="listPage" resultMap="listPageMap">
