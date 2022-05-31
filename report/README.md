@@ -1,10 +1,15 @@
+
+
 <center><font size='8'><b>CS307 Project 2 - Report</b></font></center>
 
-> Group Members:
+> Lab Session: Lab-3 (Wednesday 4:20 p.m - 6:10 p.m)
 >
-> ​	张闻城(12010324)
+> Group Number: 404
 >
-> ​	谢宇东(12011913)
+> |              |                       张闻城(12010324)                       |                       谢宇东(12011913)                       |
+> | :----------: | :----------------------------------------------------------: | :----------------------------------------------------------: |
+> |     Task     | Database table design, API implement, encapsulate backend service (HTTP/Restful), frontend design | Database table design, API implement, frontend design, optimize user experience and add more user intefaces |
+> | Contribution |                             50%                              |                             50%                              |
 
 <font size='6'><b>目录</b></font>
 
@@ -20,19 +25,9 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
 # **1. Database Design**
 
-<img src="./image/orders.png" style="zoom:30%;" />
+<img src=".\image\orders.png" style="zoom:30%;" />
 
 ## 1.1 `center`
 
@@ -97,6 +92,7 @@ constraint orders_contract_fk foreign key (contract_number) references contract 
 # **2. API Design**
 
 ## 2.1 stockIn
+
 According to `task1_in_stoke_test_data_publish.csv`, put the information into `inventory` table and `record` table.
 And we should notice that:
 (1) select the center of the salesman and it must be same as the information of the staff table
@@ -104,6 +100,7 @@ And we should notice that:
 (3) select the information of center, staff and product to make sure they exist
 
 ## 2.2 placeOrder
+
 According to `task2_test_data_publish.csv`, put the information into `orders` table and `contract` table.
 And we should notice that:
 (1) select the inventory of the model and compare it with the quantity in the order, we should make sure inventory is more than quantity
@@ -111,6 +108,7 @@ And we should notice that:
 (3) update the quantity in inventory and sales in model table
 
 ## 2.3 updateOrder
+
 According to task34_update_test_data_publish.tsv, put the information into `orders` table and `inventory` table
 And we should notice that:
 (1) select the staff in order to check whether it is the same person
@@ -118,6 +116,7 @@ And we should notice that:
 (3) check the updated quantity whether is 0
 
 ## 2.4 deleteOrder
+
 According to task34_delete_test_data_publish.tsv, put the information into `orders` table and `inventory` table
 And we should notice that:
 (1) select the staff in order to check whether it is the same person
@@ -125,7 +124,9 @@ And we should notice that:
 (3) make sure contract table does not delete contract
 
 ## 2.5 getAllStaffCount
+
 Use simple **SQL** language to get it.
+
 ```xml
 <select id="getAllStaffCount" resultMap="staffTypeToStaffCntMap">
     select type as type, count(*) as count
@@ -133,15 +134,21 @@ Use simple **SQL** language to get it.
     group by type
 </select>
 ```
+
 ## 2.6 getContractCount
+
 Use simple **SQL** language to get it.
+
 ```xml
 <select id="getContractCount" resultMap="contractCountMap">
     select count(*) as count from contract
 </select>
 ```
+
 ## 2.7 getOrderCount
+
 Use simple **SQL** language to get it.
+
 ```xml
 <select id="getOrderCount" resultMap="orderCountMap">
   select count(*) as count from orders
@@ -149,7 +156,9 @@ Use simple **SQL** language to get it.
 ```
 
 ## 2.8 getNeverSoldProductCount
+
 Find the model which sales is 0 then count the number of them.
+
 ```xml
 <select id="getNeverSoldProductCount" resultMap="neverSoldProductCountMap">
     select count(*) as count
@@ -163,7 +172,9 @@ Find the model which sales is 0 then count the number of them.
 ```
 
 ## 2.9 getFavoriteProductModel
+
 Find the model which has the highest sales, first count number of each product, then select the max.
+
 ```xml
 <select id="getFavoriteProductModel" resultMap="favoriteProductModelMap">
     select model_name, sales
@@ -173,7 +184,9 @@ Find the model which has the highest sales, first count number of each product, 
 ```
 
 ## 2.10 getAvgStockByCenter
+
 Count the number of products for each center and then divide the types of model. Notice that we should round the result and divide the types which number more than 0
+
 ```xml
 <select id="getAvgStockByCenter" resultMap="avgStockInByCenterMap">
     select c.name as centerName, round(sum(count) / count(product_model_id)::numeric, 1) as avg
@@ -185,7 +198,9 @@ Count the number of products for each center and then divide the types of model.
 ```
 
 ## 2.11 getProductByNumber
+
 Input the number of product and then select the relevant information by it. We should count number for each center
+
 ```xml
 <select id="getProductByNumber" resultMap="productByNumberMap">
     select center.name as centerName, m.model_name as modelName, i.count as count
@@ -198,7 +213,9 @@ Input the number of product and then select the relevant information by it. We s
 ```
 
 ## 2.12 getContractInfo
+
 Input yhe number of contract, and select in contract table and orders table to get the information. If there is no orders in contract, we should still show the information of the contract
+
 ```xml
 <select id="getContractInfo" resultMap="contractInfoMap">
 	select distinct c2.contract_number as contract_number,s2.name as staffName,e.name as enterpriseName ,c.name as centerName
@@ -212,6 +229,7 @@ Input yhe number of contract, and select in contract table and orders table to g
     where c2.contract_number = #{contract_number}
 </select>
 ```
+
 ```xml
 <select id="getOrderInfo" resultMap="orderInfoMap">
     select distinct m.model_name as modelName,s.name as salesmanName,quantity,unit_price as unitPrice,estimated_delivery_date,lodgement_date
@@ -225,6 +243,7 @@ Input yhe number of contract, and select in contract table and orders table to g
     where c2.contract_number = #{contract_number}
 </select>
 ```
+
 # **3. Advanced Part**
 
 ## 3.1 Enhanced Usability of API
@@ -293,25 +312,25 @@ In this project, we use [**Springboot**]([Spring Boot](https://spring.io/project
 
 In this project, we also implement the front and back-end separation.  We mainly use **[vue](https://github.com/vuejs/core)** and **[element-plus](https://github.com/element-plus/element-plus)** to build the user interface (web page).
 
-<img src="./image/login-page.png" style="zoom:40%;" />
+<img src=".\image\login-page.png" style="zoom:35%;" />
 
 <center>Figure 1. Login page</center>
 
 User need to enter his or her username and password to login the system.
 
-<img src="./image/page-1.png" style="zoom:40%;" />
+<img src=".\image\page-1.png" style="zoom:35%;" />
 
 <center>Figure 2. Basic web page</center>
 
 The data are mainly demonstrated by the form of table. To make the interface moew beautiful, we implement the pagination function of tables by using the **Pagination InnerInterceptor** of **Mybatis-Plus**. For the basic four information tables (`staff`, `center`, `enterprise`, `product`), user can execute **CRUD** operations in web page. 
 
-<img src="./image/page-insert.png" style="zoom:40%;" />
+<img src=".\image\page-insert.png" style="zoom:35%;" />
 
 <center>Figure 3. Insert data example</center>
 
 To simplify the operations of user, we add the `Initialization` button to intialize the four baisc tables at one single button. Besides, user can upload the testcase files directly in frontend page.
 
-<img src="./image/page-api.png" style="zoom:40%;" />
+<img src=".\image\page-api.png" style="zoom:35%;" />
 
 ## 3.5 Database Connection Pool
 
@@ -369,4 +388,3 @@ For the complex query to a certain table that you just need certain columns of q
     join center c on c.id = staff.supply_center_id
 </select>
 ```
-
