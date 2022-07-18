@@ -4,7 +4,6 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import edu.sustech.cs307.common.Result;
 import edu.sustech.cs307.entity.Model;
-import edu.sustech.cs307.entity.Staff;
 import edu.sustech.cs307.mapper.ModelMapper;
 import org.springframework.web.bind.annotation.*;
 

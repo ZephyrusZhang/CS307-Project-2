@@ -38,12 +38,6 @@ public class StaffController {
         }
     }
 
-    /*@GetMapping("/getAllStaffCount")
-    public List<Map<String, Object>> getAllStaffCount() {
-        List<Map<String, Object>> maps = staffMapper.getAllStaffCount();
-        maps.forEach(map -> System.out.printf("staffType=%s, staffCount=%d\n", map.get("type"), (int) map.get("count")));
-        return maps;
-    }*/
     @GetMapping("/getAllStaffCount")
     public Result<?> getAllStaffCount(@RequestParam(defaultValue = "1") Integer pageNum,
                                       @RequestParam(defaultValue = "20") Integer pageSize) {
